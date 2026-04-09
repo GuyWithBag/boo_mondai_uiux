@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // <-- Add this
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSettings } from "../contexts/SettingsContext"; // Import useSettings
 
 // --- Types ---
 type QuestionFormat = "normal" | "mcq" | "blanks" | "match";
@@ -7,7 +8,8 @@ type StudyDirection = "normal" | "reversed" | "both";
 
 // Removed the { onClose: () => void } prop requirement!
 export default function CreatorStudio() {
-  const navigate = useNavigate(); // <-- Initialize navigation
+  const navigate = useNavigate();
+  const { showNotchMargin } = useSettings(); // Use hook
 
   const [format, setFormat] = useState<QuestionFormat>("normal");
   const [direction, setDirection] = useState<StudyDirection>("normal");
@@ -18,10 +20,10 @@ export default function CreatorStudio() {
   };
 
   return (
-    <div className="absolute inset-0 z-50 bg-[#F8F9FA] flex flex-col w-full h-full animate-[fadeIn_0.3s_ease-out]">
+    <div className={`absolute inset-0 z-50 bg-[#F8F9FA] flex flex-col w-full h-full animate-[fadeIn_0.3s_ease-out] ${showNotchMargin ? 'pt-10' : 'pt-0'}`}>
       {/* Top Bar */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-20 shadow-sm shrink-0">
-        <div className="flex items-center gap-4">
+      <header className="bg-white border-b border-gray-200 px-4 py-3 md:px-6 md:py-4 flex flex-wrap items-center justify-between gap-4 z-20 shadow-sm shrink-0">
+        <div className="flex items-center gap-3 md:gap-4 flex-1">
           {/* Replaced onClose with handleClose */}
           <button
             onClick={handleClose}
@@ -29,26 +31,26 @@ export default function CreatorStudio() {
           >
             <i className="fa-solid fa-arrow-left"></i>
           </button>
-          <div className="flex flex-col">
+          <div className="flex flex-col min-w-0">
             <div className="flex items-center gap-2">
               <span className="bg-indigo-50 text-indigo-500 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider border border-indigo-100">
-                Draft Deck
+                Draft
               </span>
-              <button className="text-xs text-gray-400 font-medium transition-colors">
+              <button className="hidden sm:block text-xs text-gray-400 font-medium transition-colors">
                 <i className="fa-solid fa-lock text-[10px]"></i> Private
               </button>
             </div>
             <input
               type="text"
               defaultValue="New Untitled Deck"
-              className="text-xl font-extrabold text-gray-900 bg-transparent border-none outline-none focus:ring-0 p-0 placeholder-gray-300 w-64"
+              className="text-lg md:text-xl font-extrabold text-gray-900 bg-transparent border-none outline-none focus:ring-0 p-0 placeholder-gray-300 min-w-[120px] max-w-[200px] md:w-64"
             />
           </div>
         </div>
         {/* Replaced onClose with handleClose */}
         <button
           onClick={handleClose}
-          className="active:translate-y-1 active:shadow-none transition-all bg-indigo-500 text-white px-6 py-2 rounded-xl font-bold shadow-[0_4px_0_0_#3F498A] hover:bg-indigo-600"
+          className="active:translate-y-1 active:shadow-none transition-all bg-indigo-500 text-white px-4 py-2 md:px-6 md:py-2 rounded-xl font-bold shadow-[0_4px_0_0_#3F498A] hover:bg-indigo-600 text-sm md:text-base"
         >
           Save & Close
         </button>
@@ -115,7 +117,7 @@ export default function CreatorStudio() {
 
             {/* Conditionally Rendered Study Direction */}
             {format === "normal" && (
-              <section className="bg-white p-4 rounded-2xl border border-gray-200 flex items-center justify-between shadow-sm animate-[fadeIn_0.3s_ease-out]">
+              <section className="bg-white p-4 rounded-2xl border border-gray-200 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm animate-[fadeIn_0.3s_ease-out]">
                 <div>
                   <h3 className="font-bold text-gray-900">Study Direction</h3>
                   <p className="text-xs text-gray-500 font-medium mt-1">
@@ -126,7 +128,7 @@ export default function CreatorStudio() {
                         : "Generates 1 Note: Front→Back."}
                   </p>
                 </div>
-                <div className="flex bg-gray-100 p-1 rounded-xl">
+                <div className="flex bg-gray-100 p-1 rounded-xl w-full md:w-auto">
                   <DirectionButton
                     active={direction === "normal"}
                     label="Normal"
@@ -155,7 +157,7 @@ export default function CreatorStudio() {
               {(format === "normal" || format === "mcq") && (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Front Panel (Shared) */}
-                  <div className="bg-white rounded-3xl p-6 border-2 border-gray-200 shadow-sm flex flex-col h-full min-h-[300px]">
+                  <div className="bg-white rounded-3xl p-6 border-2 border-gray-200 shadow-sm flex flex-col h-full min-h-[200px] md:min-h-[300px]">
                     <h4 className="text-xs font-extrabold text-gray-400 uppercase tracking-widest mb-4">
                       Front (Prompt)
                     </h4>
@@ -167,7 +169,7 @@ export default function CreatorStudio() {
 
                   {/* Back Panel (Only for Flashcard) */}
                   {format === "normal" && (
-                    <div className="bg-white rounded-3xl p-6 border-2 border-gray-200 shadow-sm flex flex-col h-full min-h-[300px]">
+                    <div className="bg-white rounded-3xl p-6 border-2 border-gray-200 shadow-sm flex flex-col h-full min-h-[200px] md:min-h-[300px]">
                       <h4 className="text-xs font-extrabold text-gray-400 uppercase tracking-widest mb-4">
                         Back (Answer)
                       </h4>
@@ -180,7 +182,7 @@ export default function CreatorStudio() {
 
                   {/* MCQ Panel */}
                   {format === "mcq" && (
-                    <div className="bg-white rounded-3xl p-6 border-2 border-gray-200 shadow-sm flex flex-col h-full min-h-[300px]">
+                    <div className="bg-white rounded-3xl p-6 border-2 border-gray-200 shadow-sm flex flex-col h-full min-h-[250px] md:min-h-[300px]">
                       <h4 className="text-xs font-extrabold text-gray-400 uppercase tracking-widest mb-4 border-b border-gray-200 pb-4">
                         Answer Options
                       </h4>
@@ -190,24 +192,24 @@ export default function CreatorStudio() {
                             type="radio"
                             name="mcq"
                             defaultChecked
-                            className="w-6 h-6 ml-2 accent-[#4CAF50]"
+                            className="w-4 h-4 md:w-6 md:h-6 ml-1 md:ml-2 accent-[#4CAF50]"
                           />
                           <input
                             type="text"
                             defaultValue="Option 1"
-                            className="flex-1 bg-transparent border-none outline-none font-bold text-lg px-2"
+                            className="flex-1 bg-transparent border-none outline-none font-bold text-base md:text-lg px-2"
                           />
                         </div>
                         <div className="flex items-center gap-3 p-2 rounded-xl border-2 border-gray-200">
                           <input
                             type="radio"
                             name="mcq"
-                            className="w-6 h-6 ml-2 accent-[#4CAF50]"
+                            className="w-4 h-4 md:w-6 md:h-6 ml-1 md:ml-2 accent-[#4CAF50]"
                           />
                           <input
                             type="text"
                             placeholder="Option 2..."
-                            className="flex-1 bg-transparent border-none outline-none font-bold text-lg px-2"
+                            className="flex-1 bg-transparent border-none outline-none font-bold text-base md:text-lg px-2"
                           />
                         </div>
                       </div>
@@ -227,7 +229,7 @@ export default function CreatorStudio() {
                   </h4>
                   <div className="relative bg-[#F8F9FA] rounded-xl p-4 border border-gray-200">
                     <div
-                      className="text-2xl font-bold text-gray-900 mb-4 outline-none"
+                      className="text-xl md:text-2xl font-bold text-gray-900 mb-4 outline-none"
                       contentEditable
                       suppressContentEditableWarning
                     >
@@ -248,19 +250,19 @@ export default function CreatorStudio() {
                     Matching Pairs
                   </h4>
                   <div className="space-y-3">
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-col md:flex-row items-center gap-3">
                       <input
                         type="text"
                         placeholder="Term..."
-                        className="flex-1 bg-[#F8F9FA] border border-gray-200 rounded-xl p-3 font-bold text-lg outline-none focus:border-indigo-500"
+                        className="w-full md:flex-1 bg-[#F8F9FA] border border-gray-200 rounded-xl p-3 font-bold text-base md:text-lg outline-none focus:border-indigo-500"
                       />
-                      <div className="text-gray-300">
+                      <div className="text-gray-300 rotate-90 md:rotate-0">
                         <i className="fa-solid fa-arrow-right-arrow-left"></i>
                       </div>
                       <input
                         type="text"
                         placeholder="Match..."
-                        className="flex-1 bg-[#F8F9FA] border border-gray-200 rounded-xl p-3 font-bold text-lg outline-none focus:border-indigo-500"
+                        className="w-full md:flex-1 bg-[#F8F9FA] border border-gray-200 rounded-xl p-3 font-bold text-base md:text-lg outline-none focus:border-indigo-500"
                       />
                     </div>
                   </div>

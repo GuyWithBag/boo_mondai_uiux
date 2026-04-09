@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import { useSettings } from "../contexts/SettingsContext";
 
 export default function Decks() {
   const navigate = useNavigate();
+  const { showNotchMargin } = useSettings();
 
   return (
-    <section className="p-6 max-w-5xl w-full mx-auto space-y-8 animate-[fadeIn_0.3s_ease-out]">
+    <section className={`p-6 max-w-5xl w-full mx-auto space-y-8 animate-[fadeIn_0.3s_ease-out] ${showNotchMargin ? 'pt-10' : 'pt-0'}`}>
       {/* Top Action Bar */}
       <div className="flex items-center gap-4">
         <div className="relative flex-1">

@@ -1,7 +1,9 @@
 import { useNavigate } from "react-router-dom";
+import { useSettings } from "../contexts/SettingsContext";
 
 export default function Home() {
   const navigate = useNavigate();
+  const { showNotchMargin } = useSettings();
 
   // Mock data for the activity graph
   const weeklyActivity = [
@@ -15,7 +17,7 @@ export default function Home() {
   ];
 
   return (
-    <section className="p-6 max-w-5xl w-full mx-auto space-y-6 animate-[fadeIn_0.3s_ease-out]">
+    <section className={`p-6 max-w-5xl w-full mx-auto space-y-6 animate-[fadeIn_0.3s_ease-out] ${showNotchMargin ? 'pt-10' : 'pt-0'}`}>
       {/* HERO CTA */}
       <div className="bg-white rounded-3xl p-6 md:p-8 border-2 border-gray-200 shadow-sm flex flex-col md:flex-row items-center gap-8 relative overflow-hidden">
         <div className="flex-1 space-y-4 z-10 text-center md:text-left">

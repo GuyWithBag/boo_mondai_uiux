@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSettings } from "../contexts/SettingsContext";
 
 // --- Types ---
 type QuestionFormat = "normal" | "mcq" | "blanks" | "match";
@@ -66,6 +67,7 @@ const mockQueue: QuizCard[] = [
 
 export default function StudySession() {
   const navigate = useNavigate();
+  const { showNotchMargin } = useSettings();
 
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
@@ -104,7 +106,6 @@ export default function StudySession() {
   // --- RENDERERS FOR DIFFERENT CARD TYPES ---
 
   const renderFlashcard = (card: Flashcard) => (
-    // Scaled up for desktop: max-w-[340px] -> max-w-[460px]
     <div
       className="w-full max-w-[340px] md:max-w-[460px] mx-auto aspect-[3/4] md:aspect-[4/5] cursor-pointer"
       style={{ perspective: "1000px" }}
@@ -117,7 +118,6 @@ export default function StudySession() {
           transform: isRevealed ? "rotateY(180deg)" : "rotateY(0deg)",
         }}
       >
-        {/* Front */}
         <div
           className="absolute inset-0 bg-white border-2 border-gray-200 rounded-[32px] flex flex-col items-center justify-center p-8 md:p-12 text-center"
           style={{ backfaceVisibility: "hidden" }}
@@ -129,7 +129,6 @@ export default function StudySession() {
             <i className="fa-solid fa-hand-pointer mr-2"></i> Tap to reveal
           </p>
         </div>
-        {/* Back */}
         <div
           className="absolute inset-0 bg-white border-2 border-indigo-500 rounded-[32px] flex flex-col items-center justify-center p-8 md:p-12 text-center shadow-[0_8px_30px_rgba(99,102,241,0.15)]"
           style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
@@ -147,7 +146,6 @@ export default function StudySession() {
   );
 
   const renderMCQ = (card: MCQCard) => (
-    // Scaled up for desktop
     <div className="w-full max-w-[340px] md:max-w-[480px] mx-auto min-h-[460px] md:min-h-[540px] bg-white border-2 border-gray-200 rounded-[32px] p-6 md:p-10 shadow-md flex flex-col justify-between animate-[fadeIn_0.3s_ease-out]">
       <div className="flex flex-col items-center pt-4">
         <h2 className="text-sm font-extrabold text-gray-400 uppercase tracking-widest mb-6 md:mb-8">
@@ -305,7 +303,9 @@ export default function StudySession() {
   };
 
   return (
-    <div className="absolute inset-0 z-50 bg-[#F8F9FA] flex flex-col w-full h-full overflow-hidden">
+    <div 
+      className={`absolute inset-0 z-50 bg-[#F8F9FA] flex flex-col w-full h-full overflow-hidden transition-all duration-300 ${showNotchMargin ? 'pt-10' : 'pt-0'}`}
+    >
       {/* Top Progress Bar */}
       <div className="px-6 py-4 flex items-center gap-4 border-b border-gray-200/50 shrink-0">
         <button
@@ -342,7 +342,6 @@ export default function StudySession() {
         {!isRevealed &&
           currentCard.type !== "normal" &&
           currentCard.type !== "match" && (
-            // Scaled check answer button container
             <div className="w-full max-w-[340px] md:max-w-[480px] mx-auto">
               <button
                 onClick={handleCheckAnswer}
@@ -362,7 +361,6 @@ export default function StudySession() {
             <h4 className="text-center text-xs md:text-sm font-bold text-gray-400 mb-4 md:mb-6 uppercase tracking-widest">
               How well did you know this?
             </h4>
-            {/* Scaled rating buttons container */}
             <div className="grid grid-cols-4 gap-2 md:gap-4 w-full max-w-[340px] md:max-w-[480px] mx-auto">
               <RatingButton
                 color="red"

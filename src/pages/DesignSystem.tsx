@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useSettings } from "../contexts/SettingsContext";
 
 // --- Design System Components ---
 const Section = ({
@@ -46,9 +47,10 @@ const ColorBubble = ({
 // Changed: Removed onClose prop, using useNavigate instead
 export default function DesignSystem() {
   const navigate = useNavigate();
+  const { showNotchMargin } = useSettings();
 
   return (
-    <div className="bg-[#F8F9FA] h-full overflow-y-auto p-8 md:p-16 max-w-7xl mx-auto font-sans antialiased relative">
+    <div className={`bg-[#F8F9FA] h-full overflow-y-auto p-8 md:p-16 max-w-7xl mx-auto font-sans antialiased relative ${showNotchMargin ? 'pt-10' : 'pt-0'}`}>
       {/* Close Button routing back to the previous page */}
       <button
         onClick={() => navigate(-1)}
