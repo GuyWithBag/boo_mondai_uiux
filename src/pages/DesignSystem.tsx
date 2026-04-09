@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 // --- Design System Components ---
 const Section = ({
@@ -42,13 +43,15 @@ const ColorBubble = ({
   </div>
 );
 
-export function DesignSystem({ onClose }: { onClose: () => void }) {
+// Changed: Removed onClose prop, using useNavigate instead
+export default function DesignSystem() {
+  const navigate = useNavigate();
+
   return (
-    // Fixed: Changed min-h-screen to h-full and added overflow-y-auto
     <div className="bg-[#F8F9FA] h-full overflow-y-auto p-8 md:p-16 max-w-7xl mx-auto font-sans antialiased relative">
-      {/* Close Button for Prototype Navigation */}
+      {/* Close Button routing back to the previous page */}
       <button
-        onClick={onClose}
+        onClick={() => navigate(-1)}
         className="fixed top-8 right-8 z-50 w-12 h-12 rounded-2xl bg-white border-2 border-gray-200 text-gray-500 hover:bg-gray-50 flex items-center justify-center shadow-sm transition-all active:translate-y-1 active:shadow-none"
       >
         <i className="fa-solid fa-xmark text-xl"></i>
@@ -174,7 +177,6 @@ export function DesignSystem({ onClose }: { onClose: () => void }) {
       {/* 4. Interactive Components */}
       <Section title="04. The Button Lab">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {/* Action Buttons */}
           <div className="space-y-6">
             <h3 className="font-bold text-gray-400 text-xs uppercase tracking-widest">
               Action Variants
@@ -197,7 +199,6 @@ export function DesignSystem({ onClose }: { onClose: () => void }) {
             </div>
           </div>
 
-          {/* Rating Buttons */}
           <div className="space-y-6">
             <h3 className="font-bold text-gray-400 text-xs uppercase tracking-widest">
               Memory Rating (Tactile)
@@ -224,23 +225,15 @@ export function DesignSystem({ onClose }: { onClose: () => void }) {
             contextualize. By transforming progress into a physical "Pathway,"
             learning becomes a tangible journey.
           </p>
-
-          {/* Pathway Visualization */}
           <div className="relative w-full max-w-3xl flex justify-between items-center py-8">
-            {/* Background Line */}
             <div className="absolute top-1/2 left-0 w-full h-3 bg-gray-100 -translate-y-1/2 rounded-full z-0"></div>
-            {/* Active Progress Line */}
             <div className="absolute top-1/2 left-0 w-1/2 h-3 bg-indigo-500 -translate-y-1/2 rounded-full z-0 transition-all duration-1000"></div>
-
-            {/* Completed Nodes */}
             <div className="w-14 h-14 rounded-full bg-indigo-500 text-white z-10 flex items-center justify-center shadow-[0_4px_0_0_#3F498A] font-bold border-4 border-white">
               <i className="fa-solid fa-check"></i>
             </div>
             <div className="w-14 h-14 rounded-full bg-indigo-500 text-white z-10 flex items-center justify-center shadow-[0_4px_0_0_#3F498A] font-bold border-4 border-white">
               <i className="fa-solid fa-check"></i>
             </div>
-
-            {/* Current Active Node */}
             <div className="relative z-10">
               <div className="absolute -top-10 left-1/2 -translate-x-1/2 bg-gray-900 text-white text-[10px] font-bold px-3 py-1 rounded-full animate-pulse whitespace-nowrap">
                 You are here
@@ -249,8 +242,6 @@ export function DesignSystem({ onClose }: { onClose: () => void }) {
                 <i className="fa-solid fa-fire"></i>
               </div>
             </div>
-
-            {/* Locked Nodes */}
             <div className="w-14 h-14 rounded-full bg-gray-200 text-gray-400 z-10 flex items-center justify-center shadow-sm font-bold border-4 border-white">
               <i className="fa-solid fa-lock text-sm"></i>
             </div>
@@ -269,9 +260,7 @@ export function DesignSystem({ onClose }: { onClose: () => void }) {
             the user's spatial awareness by physically morphing the clicked
             element into the next screen's header.
           </p>
-
           <div className="flex flex-col md:flex-row items-center gap-8 w-full max-w-4xl justify-center">
-            {/* State 1: Card view */}
             <div className="bg-gray-50 p-6 rounded-3xl border-2 border-gray-200 w-full md:w-1/3">
               <div className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">
                 State 1: Deck List
@@ -285,8 +274,6 @@ export function DesignSystem({ onClose }: { onClose: () => void }) {
               <div className="h-4 bg-gray-200 rounded-full w-3/4 mb-2"></div>
               <div className="h-4 bg-gray-200 rounded-full w-1/2"></div>
             </div>
-
-            {/* Morph Arrow */}
             <div className="flex flex-col items-center text-indigo-300">
               <i className="fa-solid fa-arrow-right-long text-4xl hidden md:block"></i>
               <i className="fa-solid fa-arrow-down-long text-4xl md:hidden"></i>
@@ -294,8 +281,6 @@ export function DesignSystem({ onClose }: { onClose: () => void }) {
                 Morphs into
               </span>
             </div>
-
-            {/* State 2: Header View */}
             <div className="bg-white p-6 rounded-3xl border-2 border-indigo-500 shadow-[0_8px_30px_rgba(99,102,241,0.15)] w-full md:w-1/2">
               <div className="text-xs font-black text-gray-400 uppercase tracking-widest mb-4">
                 State 2: Study Session

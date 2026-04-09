@@ -1,19 +1,30 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // <-- Add this
 
-export type QuestionFormat = "normal" | "mcq" | "blanks" | "match";
-export type StudyDirection = "normal" | "reversed" | "both";
-// --- IMMERSIVE CREATOR STUDIO ---
-export function CreatorStudio({ onClose }: { onClose: () => void }) {
+// --- Types ---
+type QuestionFormat = "normal" | "mcq" | "blanks" | "match";
+type StudyDirection = "normal" | "reversed" | "both";
+
+// Removed the { onClose: () => void } prop requirement!
+export default function CreatorStudio() {
+  const navigate = useNavigate(); // <-- Initialize navigation
+
   const [format, setFormat] = useState<QuestionFormat>("normal");
   const [direction, setDirection] = useState<StudyDirection>("normal");
+
+  // Helper function to handle closing
+  const handleClose = () => {
+    navigate("/decks"); // Route back to the decks page
+  };
 
   return (
     <div className="absolute inset-0 z-50 bg-[#F8F9FA] flex flex-col w-full h-full animate-[fadeIn_0.3s_ease-out]">
       {/* Top Bar */}
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between z-20 shadow-sm shrink-0">
         <div className="flex items-center gap-4">
+          {/* Replaced onClose with handleClose */}
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="w-10 h-10 rounded-xl bg-gray-100 text-gray-500 hover:bg-gray-200 flex items-center justify-center transition-colors"
           >
             <i className="fa-solid fa-arrow-left"></i>
@@ -34,8 +45,9 @@ export function CreatorStudio({ onClose }: { onClose: () => void }) {
             />
           </div>
         </div>
+        {/* Replaced onClose with handleClose */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="active:translate-y-1 active:shadow-none transition-all bg-indigo-500 text-white px-6 py-2 rounded-xl font-bold shadow-[0_4px_0_0_#3F498A] hover:bg-indigo-600"
         >
           Save & Close
@@ -102,7 +114,6 @@ export function CreatorStudio({ onClose }: { onClose: () => void }) {
             </section>
 
             {/* Conditionally Rendered Study Direction */}
-            {/* The UI correctly hides irrelevant sections based on Question Type */}
             {format === "normal" && (
               <section className="bg-white p-4 rounded-2xl border border-gray-200 flex items-center justify-between shadow-sm animate-[fadeIn_0.3s_ease-out]">
                 <div>
@@ -266,7 +277,8 @@ export function CreatorStudio({ onClose }: { onClose: () => void }) {
   );
 }
 
-export function FormatButton({
+// --- HELPER UI COMPONENTS ---
+function FormatButton({
   active,
   icon,
   label,
@@ -287,7 +299,7 @@ export function FormatButton({
   );
 }
 
-export function DirectionButton({
+function DirectionButton({
   active,
   label,
   onClick,

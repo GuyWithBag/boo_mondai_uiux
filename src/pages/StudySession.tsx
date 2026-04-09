@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 // --- Types ---
 type QuestionFormat = "normal" | "mcq" | "blanks" | "match";
@@ -50,7 +51,7 @@ const mockQueue: QuizCard[] = [
     type: "blanks",
     prefix: "私は毎日",
     blankAnswer: "図書館",
-    suffix: "で勉強します。 (I study at the library every day.)",
+    suffix: "で勉強します。",
   },
   {
     id: "4",
@@ -63,22 +64,21 @@ const mockQueue: QuizCard[] = [
   },
 ];
 
-export default function StudySession({ onClose }: { onClose: () => void }) {
+export default function StudySession() {
+  const navigate = useNavigate();
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
 
-  // State for specific question types
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
   const [blankInput, setBlankInput] = useState("");
 
-  // State for Match Madness
   const [selectedMatchA, setSelectedMatchA] = useState<string | null>(null);
   const [matchedPairs, setMatchedPairs] = useState<string[]>([]);
 
   const currentCard = mockQueue[currentIndex];
   const progress = (currentIndex / mockQueue.length) * 100;
 
-  // Reset states when moving to a new card
   useEffect(() => {
     setIsRevealed(false);
     setSelectedOption(null);
@@ -93,7 +93,7 @@ export default function StudySession({ onClose }: { onClose: () => void }) {
       setCurrentIndex(currentIndex + 1);
     } else {
       alert("Session Complete! You're all caught up.");
-      onClose();
+      navigate("/");
     }
   };
 
@@ -103,29 +103,76 @@ export default function StudySession({ onClose }: { onClose: () => void }) {
 
   // --- RENDERERS FOR DIFFERENT CARD TYPES ---
 
+  const renderFlashcard = (card: Flashcard) => (
+    // Scaled up for desktop: max-w-[340px] -> max-w-[460px]
+    <div
+      className="w-full max-w-[340px] md:max-w-[460px] mx-auto aspect-[3/4] md:aspect-[4/5] cursor-pointer"
+      style={{ perspective: "1000px" }}
+      onClick={() => setIsRevealed(true)}
+    >
+      <div
+        className="relative w-full h-full transition-transform duration-500 shadow-md rounded-[32px]"
+        style={{
+          transformStyle: "preserve-3d",
+          transform: isRevealed ? "rotateY(180deg)" : "rotateY(0deg)",
+        }}
+      >
+        {/* Front */}
+        <div
+          className="absolute inset-0 bg-white border-2 border-gray-200 rounded-[32px] flex flex-col items-center justify-center p-8 md:p-12 text-center"
+          style={{ backfaceVisibility: "hidden" }}
+        >
+          <h2 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight leading-tight">
+            {card.front}
+          </h2>
+          <p className="text-gray-400 font-medium mt-auto absolute bottom-8 md:bottom-10 animate-pulse text-sm md:text-base">
+            <i className="fa-solid fa-hand-pointer mr-2"></i> Tap to reveal
+          </p>
+        </div>
+        {/* Back */}
+        <div
+          className="absolute inset-0 bg-white border-2 border-indigo-500 rounded-[32px] flex flex-col items-center justify-center p-8 md:p-12 text-center shadow-[0_8px_30px_rgba(99,102,241,0.15)]"
+          style={{ backfaceVisibility: "hidden", transform: "rotateY(180deg)" }}
+        >
+          <h2 className="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight">
+            {card.front}
+          </h2>
+          <div className="w-12 md:w-16 h-1 bg-gray-200 rounded-full mb-8"></div>
+          <h3 className="text-2xl md:text-4xl font-bold text-indigo-500">
+            {card.back}
+          </h3>
+        </div>
+      </div>
+    </div>
+  );
+
   const renderMCQ = (card: MCQCard) => (
-    <div className="flex flex-col h-full animate-[fadeIn_0.3s_ease-out]">
-      <h2 className="text-2xl font-extrabold text-gray-900 mb-6 text-center leading-tight">
-        {card.prompt}
-      </h2>
-      <div className="space-y-3 flex-1 overflow-y-auto pr-1 custom-scrollbar">
+    // Scaled up for desktop
+    <div className="w-full max-w-[340px] md:max-w-[480px] mx-auto min-h-[460px] md:min-h-[540px] bg-white border-2 border-gray-200 rounded-[32px] p-6 md:p-10 shadow-md flex flex-col justify-between animate-[fadeIn_0.3s_ease-out]">
+      <div className="flex flex-col items-center pt-4">
+        <h2 className="text-sm font-extrabold text-gray-400 uppercase tracking-widest mb-6 md:mb-8">
+          Select Answer
+        </h2>
+        <h3 className="text-xl md:text-2xl font-extrabold text-gray-900 mb-8 text-center leading-snug">
+          {card.prompt}
+        </h3>
+      </div>
+
+      <div className="space-y-3 md:space-y-4 w-full pb-2">
         {card.options.map((option) => {
           const isSelected = selectedOption === option;
           const isCorrect = option === card.correctOption;
 
           let btnClass =
-            "border-gray-200 hover:border-indigo-500 hover:bg-indigo-50 text-gray-700 shadow-[0_4px_0_0_#E5E7EB]";
+            "border-gray-200 hover:border-indigo-500 hover:bg-indigo-50 text-gray-700 bg-white";
 
           if (isRevealed) {
             if (isCorrect)
               btnClass =
                 "border-green-500 bg-green-50 text-green-700 shadow-[0_4px_0_0_#4CAF50]";
             else if (isSelected && !isCorrect)
-              btnClass =
-                "border-red-500 bg-red-50 text-red-700 opacity-60 shadow-[0_4px_0_0_#EF4444]";
-            else
-              btnClass =
-                "border-gray-200 opacity-50 shadow-[0_4px_0_0_#E5E7EB]";
+              btnClass = "border-red-500 bg-red-50 text-red-700 opacity-50";
+            else btnClass = "border-gray-200 bg-white opacity-50";
           } else if (isSelected) {
             btnClass =
               "border-indigo-500 bg-indigo-50 text-indigo-700 shadow-[0_4px_0_0_#5C6BC0]";
@@ -136,9 +183,7 @@ export default function StudySession({ onClose }: { onClose: () => void }) {
               key={option}
               disabled={isRevealed}
               onClick={() => setSelectedOption(option)}
-              className={`w-full p-4 rounded-2xl border-2 font-bold text-base md:text-lg text-left transition-all active:translate-y-1 active:shadow-none ${
-                isSelected && !isRevealed ? "translate-y-1 shadow-none" : ""
-              } ${btnClass}`}
+              className={`w-full p-4 md:p-5 rounded-2xl border-2 font-bold text-base md:text-lg text-left transition-all ${btnClass}`}
             >
               {option}
             </button>
@@ -154,23 +199,27 @@ export default function StudySession({ onClose }: { onClose: () => void }) {
     const inputClass = isRevealed
       ? isCorrect
         ? "bg-green-50 text-green-700 border-green-500"
-        : "bg-red-50 text-red-700 border-red-500 line-through opacity-70"
-      : "bg-gray-50 border-gray-300 focus:border-indigo-500 text-indigo-500 shadow-inner";
+        : "bg-red-50 text-red-700 border-red-500 line-through"
+      : "bg-gray-50 border-gray-300 focus:border-indigo-500 focus:bg-white text-indigo-500";
 
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center animate-[fadeIn_0.3s_ease-out]">
-        <div className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-relaxed flex flex-wrap items-center justify-center gap-3">
+      <div className="w-full max-w-[340px] md:max-w-[480px] mx-auto min-h-[460px] md:min-h-[540px] bg-white border-2 border-gray-200 rounded-[32px] p-6 md:p-10 shadow-md flex flex-col items-center justify-center text-center animate-[fadeIn_0.3s_ease-out]">
+        <h2 className="text-sm font-extrabold text-gray-400 uppercase tracking-widest mb-10 md:mb-12">
+          Fill in the blank
+        </h2>
+
+        <div className="text-2xl md:text-3xl font-extrabold text-gray-900 leading-loose flex flex-wrap items-center justify-center gap-2 md:gap-3">
           <span>{card.prefix}</span>
-          <div className="relative inline-block mt-2 mb-2">
+          <div className="relative inline-block w-full my-2 md:my-4">
             <input
               type="text"
               disabled={isRevealed}
               value={blankInput}
               onChange={(e) => setBlankInput(e.target.value)}
-              className={`w-32 md:w-40 text-center font-bold px-4 py-3 rounded-2xl border-b-4 outline-none transition-colors ${inputClass}`}
+              className={`w-[80%] md:w-[70%] text-center font-bold px-4 py-2 md:py-3 rounded-xl border-b-4 outline-none transition-colors ${inputClass}`}
             />
             {isRevealed && !isCorrect && (
-              <span className="absolute -top-10 left-1/2 -translate-x-1/2 text-sm font-black text-green-600 bg-green-100 px-3 py-1 rounded-lg shadow-sm whitespace-nowrap">
+              <span className="absolute -bottom-8 md:-bottom-10 left-1/2 -translate-x-1/2 text-sm md:text-base font-bold text-green-500 bg-green-50 border border-green-200 px-3 py-1 rounded-lg shadow-sm whitespace-nowrap">
                 {card.blankAnswer}
               </span>
             )}
@@ -185,7 +234,7 @@ export default function StudySession({ onClose }: { onClose: () => void }) {
     const terms = card.pairs.map((p) => p.term);
     const matches = card.pairs.map((p) => p.match);
 
-    const handleMatchClick = (item: string) => {
+    const handleMatchClick = (item: string, isTerm: boolean) => {
       if (isRevealed) return;
       if (!selectedMatchA) {
         setSelectedMatchA(item);
@@ -208,38 +257,42 @@ export default function StudySession({ onClose }: { onClose: () => void }) {
     };
 
     return (
-      <div className="flex flex-col h-full animate-[fadeIn_0.3s_ease-out]">
-        <div className="grid grid-cols-2 gap-4 flex-1">
-          <div className="space-y-3 flex flex-col justify-center">
+      <div className="w-full max-w-[340px] md:max-w-[480px] mx-auto min-h-[460px] md:min-h-[540px] bg-white border-2 border-gray-200 rounded-[32px] p-6 md:p-10 shadow-md flex flex-col justify-center animate-[fadeIn_0.3s_ease-out]">
+        <h2 className="text-sm font-extrabold text-gray-400 uppercase tracking-widest mb-8 md:mb-12 text-center">
+          Match the pairs
+        </h2>
+
+        <div className="grid grid-cols-2 gap-3 md:gap-5 w-full">
+          <div className="space-y-3 md:space-y-5">
             {terms.map((term) => (
               <button
                 key={term}
                 disabled={matchedPairs.includes(term) || isRevealed}
-                onClick={() => handleMatchClick(term)}
-                className={`w-full p-4 rounded-2xl border-2 font-bold text-base md:text-lg transition-all shadow-[0_4px_0_0_#E5E7EB] active:translate-y-1 active:shadow-none ${
+                onClick={() => handleMatchClick(term, true)}
+                className={`w-full py-4 md:py-6 px-2 md:px-4 rounded-xl md:rounded-2xl border-2 font-bold text-sm md:text-base text-center transition-all ${
                   matchedPairs.includes(term)
-                    ? "opacity-0 pointer-events-none"
+                    ? "opacity-0"
                     : selectedMatchA === term
-                      ? "border-indigo-500 bg-indigo-50 text-indigo-500 translate-y-1 !shadow-none"
-                      : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white"
+                      ? "border-indigo-500 bg-indigo-50 text-indigo-500 shadow-[0_4px_0_0_#5C6BC0]"
+                      : "border-gray-200 hover:border-gray-300 bg-gray-50 hover:bg-white text-gray-700"
                 }`}
               >
                 {term}
               </button>
             ))}
           </div>
-          <div className="space-y-3 flex flex-col justify-center">
+          <div className="space-y-3 md:space-y-5">
             {matches.map((match) => (
               <button
                 key={match}
                 disabled={matchedPairs.includes(match) || isRevealed}
-                onClick={() => handleMatchClick(match)}
-                className={`w-full p-4 rounded-2xl border-2 font-bold text-base md:text-lg transition-all shadow-[0_4px_0_0_#E5E7EB] active:translate-y-1 active:shadow-none ${
+                onClick={() => handleMatchClick(match, false)}
+                className={`w-full py-4 md:py-6 px-2 md:px-4 rounded-xl md:rounded-2xl border-2 font-bold text-sm md:text-base text-center transition-all ${
                   matchedPairs.includes(match)
-                    ? "opacity-0 pointer-events-none"
+                    ? "opacity-0"
                     : selectedMatchA === match
-                      ? "border-indigo-500 bg-indigo-50 text-indigo-500 translate-y-1 !shadow-none"
-                      : "border-gray-200 hover:border-gray-300 text-gray-700 bg-white"
+                      ? "border-indigo-500 bg-indigo-50 text-indigo-500 shadow-[0_4px_0_0_#5C6BC0]"
+                      : "border-gray-200 hover:border-gray-300 bg-gray-50 hover:bg-white text-gray-700"
                 }`}
               >
                 {match}
@@ -251,171 +304,97 @@ export default function StudySession({ onClose }: { onClose: () => void }) {
     );
   };
 
-  const getCardHeaderLabel = (type: QuestionFormat) => {
-    switch (type) {
-      case "normal":
-        return "Flashcard";
-      case "mcq":
-        return "Multiple Choice";
-      case "blanks":
-        return "Fill in the blanks";
-      case "match":
-        return "Match the pairs";
-    }
-  };
-
   return (
-    <div className="absolute inset-0 z-50 bg-[#F8F9FA] flex flex-col w-full h-full font-sans overflow-hidden">
-      {/* Tactile Top Progress Bar */}
-      <div className="w-full max-w-lg mx-auto px-6 py-6 flex items-center gap-4">
+    <div className="absolute inset-0 z-50 bg-[#F8F9FA] flex flex-col w-full h-full overflow-hidden">
+      {/* Top Progress Bar */}
+      <div className="px-6 py-4 flex items-center gap-4 border-b border-gray-200/50 shrink-0">
         <button
-          onClick={onClose}
-          className="w-10 h-10 rounded-xl bg-white border-2 border-gray-200 text-gray-400 hover:text-gray-700 flex items-center justify-center shadow-sm active:translate-y-1 active:shadow-none transition-all"
+          onClick={() => navigate(-1)}
+          className="text-gray-400 hover:text-gray-700 transition-colors"
         >
-          <i className="fa-solid fa-xmark text-lg"></i>
+          <i className="fa-solid fa-xmark text-2xl"></i>
         </button>
-        <div className="flex-1 h-4 bg-gray-200 rounded-full overflow-hidden shadow-inner relative">
+        <div className="flex-1 h-3 md:h-4 bg-gray-200 rounded-full overflow-hidden">
           <div
             className="h-full bg-indigo-500 rounded-full transition-all duration-500 relative"
             style={{ width: `${progress}%` }}
           >
-            {/* Highlight line for physical depth */}
-            <div className="absolute top-1 left-2 right-2 h-1 bg-white/30 rounded-full"></div>
+            <div className="absolute top-0.5 left-2 right-2 h-0.5 md:h-1 md:top-1 bg-white/30 rounded-full"></div>
           </div>
+        </div>
+        <div className="text-xs md:text-sm font-bold text-gray-400 uppercase tracking-widest">
+          {currentIndex + 1} / {mockQueue.length}
         </div>
       </div>
 
-      {/* Main Content Area - Centered Tactile Card */}
-      <div
-        className="flex-1 w-full flex flex-col items-center justify-center px-4 pb-12 overflow-hidden"
-        style={{ perspective: "1500px" }}
-      >
-        {/* The Physical Card Wrapper */}
-        <div
-          className="relative w-full max-w-[380px] md:max-w-[420px] aspect-[3/4] max-h-[70vh] transition-transform duration-700"
-          style={{
-            transformStyle: "preserve-3d",
-            transform:
-              isRevealed && currentCard.type === "normal"
-                ? "rotateY(180deg)"
-                : "rotateY(0deg)",
-          }}
-        >
-          {/* FRONT OF CARD */}
-          <div
-            className="absolute inset-0 bg-white border-2 border-gray-200 rounded-[40px] shadow-[0_12px_0_0_#E5E7EB] flex flex-col p-6 md:p-8"
-            style={{ backfaceVisibility: "hidden" }}
-          >
-            {/* Card Header Label */}
-            <div className="flex justify-center mb-6">
-              <span className="text-[10px] md:text-xs font-black text-gray-400 uppercase tracking-[0.2em]">
-                {getCardHeaderLabel(currentCard.type)}
-              </span>
-            </div>
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col items-center justify-center px-4 overflow-y-auto pb-36 pt-8 md:pt-12">
+        {currentCard.type === "normal" &&
+          renderFlashcard(currentCard as Flashcard)}
+        {currentCard.type === "mcq" && renderMCQ(currentCard as MCQCard)}
+        {currentCard.type === "blanks" &&
+          renderBlanks(currentCard as BlanksCard)}
+        {currentCard.type === "match" && renderMatch(currentCard as MatchCard)}
+      </div>
 
-            {/* Content Injection */}
-            <div className="flex-1 flex flex-col overflow-hidden">
-              {currentCard.type === "normal" && (
-                <div
-                  className="flex-1 flex flex-col items-center justify-center cursor-pointer"
-                  onClick={() => setIsRevealed(true)}
-                >
-                  <h2 className="text-5xl md:text-7xl font-extrabold text-gray-900 tracking-tight text-center">
-                    {(currentCard as Flashcard).front}
-                  </h2>
-                  <p className="text-gray-400 font-bold text-sm mt-12 animate-pulse flex items-center gap-2">
-                    <i className="fa-solid fa-hand-pointer"></i> Tap to flip
-                  </p>
-                </div>
-              )}
-              {currentCard.type === "mcq" && renderMCQ(currentCard as MCQCard)}
-              {currentCard.type === "blanks" &&
-                renderBlanks(currentCard as BlanksCard)}
-              {currentCard.type === "match" &&
-                renderMatch(currentCard as MatchCard)}
-            </div>
-          </div>
-
-          {/* BACK OF CARD (Only used for Flashcards) */}
-          <div
-            className="absolute inset-0 bg-white border-2 border-indigo-500 rounded-[40px] shadow-[0_12px_0_0_#C7D2FE] flex flex-col p-6 md:p-8"
-            style={{
-              backfaceVisibility: "hidden",
-              transform: "rotateY(180deg)",
-            }}
-          >
-            <div className="flex justify-center mb-6">
-              <span className="text-[10px] md:text-xs font-black text-indigo-400 uppercase tracking-[0.2em]">
-                Answer
-              </span>
-            </div>
-
-            <div className="flex-1 flex flex-col items-center justify-center">
-              <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 mb-6 text-center">
-                {(currentCard as Flashcard).front}
-              </h2>
-              <div className="w-16 h-1.5 bg-indigo-100 rounded-full mb-6"></div>
-              <h3 className="text-2xl md:text-3xl font-black text-indigo-500 text-center">
-                {(currentCard as Flashcard).back}
-              </h3>
-            </div>
-          </div>
-        </div>
-
-        {/* Action Area anchored immediately below the card */}
-        <div className="w-full max-w-[380px] md:max-w-[420px] mt-10 min-h-[80px]">
-          {/* State 1: Needs to check answer (Hidden for Flashcards/Match Madness) */}
-          {!isRevealed &&
-            currentCard.type !== "normal" &&
-            currentCard.type !== "match" && (
+      {/* Bottom Action Area (Sticky) */}
+      <div className="absolute bottom-0 left-0 right-0 p-6 md:p-8 bg-white border-t border-gray-200 rounded-t-3xl md:rounded-t-[40px] shadow-[0_-10px_40px_rgba(0,0,0,0.05)] shrink-0">
+        {!isRevealed &&
+          currentCard.type !== "normal" &&
+          currentCard.type !== "match" && (
+            // Scaled check answer button container
+            <div className="w-full max-w-[340px] md:max-w-[480px] mx-auto">
               <button
                 onClick={handleCheckAnswer}
                 disabled={
                   (currentCard.type === "mcq" && !selectedOption) ||
                   (currentCard.type === "blanks" && !blankInput)
                 }
-                className="w-full active:translate-y-1 active:shadow-none disabled:opacity-50 disabled:active:translate-y-0 disabled:cursor-not-allowed bg-indigo-500 text-white px-8 py-4 rounded-2xl font-black text-lg shadow-[0_6px_0_0_#3F498A] hover:bg-indigo-600 transition-all uppercase tracking-wider"
+                className="w-full block active:translate-y-1 active:shadow-none disabled:opacity-50 disabled:active:translate-y-0 disabled:cursor-not-allowed bg-indigo-500 text-white px-8 py-4 md:py-5 rounded-2xl md:rounded-[20px] font-bold text-lg md:text-xl shadow-[0_6px_0_0_#3F498A] hover:bg-indigo-600 transition-all"
               >
                 Check Answer
               </button>
-            )}
-
-          {/* State 2: FSRS Ratings (Revealed) */}
-          {isRevealed && (
-            <div className="animate-[fadeIn_0.3s_ease-out]">
-              <div className="grid grid-cols-4 gap-2 md:gap-3">
-                <RatingButton
-                  color="red"
-                  label="Again"
-                  time="1m"
-                  shadow="#FECACA"
-                  onClick={() => handleRate("again")}
-                />
-                <RatingButton
-                  color="orange"
-                  label="Hard"
-                  time="6m"
-                  shadow="#FED7AA"
-                  onClick={() => handleRate("hard")}
-                />
-                <RatingButton
-                  color="green"
-                  label="Good"
-                  time="10m"
-                  shadow="#BBF7D0"
-                  onClick={() => handleRate("good")}
-                />
-                <RatingButton
-                  color="blue"
-                  label="Easy"
-                  time="4d"
-                  shadow="#BFDBFE"
-                  onClick={() => handleRate("easy")}
-                />
-              </div>
             </div>
           )}
-        </div>
+
+        {isRevealed && (
+          <div className="animate-[fadeIn_0.3s_ease-out]">
+            <h4 className="text-center text-xs md:text-sm font-bold text-gray-400 mb-4 md:mb-6 uppercase tracking-widest">
+              How well did you know this?
+            </h4>
+            {/* Scaled rating buttons container */}
+            <div className="grid grid-cols-4 gap-2 md:gap-4 w-full max-w-[340px] md:max-w-[480px] mx-auto">
+              <RatingButton
+                color="red"
+                label="Again"
+                time="1m"
+                shadow="#ffcdd2"
+                onClick={() => handleRate("again")}
+              />
+              <RatingButton
+                color="orange"
+                label="Hard"
+                time="6m"
+                shadow="#ffe0b2"
+                onClick={() => handleRate("hard")}
+              />
+              <RatingButton
+                color="green"
+                label="Good"
+                time="10m"
+                shadow="#c8e6c9"
+                onClick={() => handleRate("good")}
+              />
+              <RatingButton
+                color="blue"
+                label="Easy"
+                time="4d"
+                shadow="#bbdefb"
+                onClick={() => handleRate("easy")}
+              />
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -436,23 +415,24 @@ function RatingButton({
   onClick: () => void;
 }) {
   const bgClasses: Record<string, string> = {
-    red: "bg-red-50 text-red-600 border-red-200 hover:bg-red-100",
-    orange:
-      "bg-orange-50 text-orange-500 border-orange-200 hover:bg-orange-100",
-    green: "bg-green-50 text-green-600 border-green-200 hover:bg-green-100",
-    blue: "bg-blue-50 text-blue-500 border-blue-200 hover:bg-blue-100",
+    red: "bg-red-50 text-[#F44336] border-red-200 hover:bg-red-100",
+    orange: "bg-orange-50 text-[#FF9800] border-orange-200 hover:bg-orange-100",
+    green: "bg-green-50 text-[#4CAF50] border-green-200 hover:bg-green-100",
+    blue: "bg-blue-50 text-[#2196F3] border-blue-200 hover:bg-blue-100",
   };
 
   return (
     <button
       onClick={onClick}
-      className={`active:translate-y-1 active:shadow-none transition-all border-2 rounded-2xl py-3 flex flex-col items-center justify-center cursor-pointer ${bgClasses[color]}`}
+      className={`active:translate-y-1 active:shadow-none transition-all border-2 rounded-[20px] md:rounded-3xl py-3 md:py-4 px-1 flex flex-col items-center justify-center cursor-pointer ${bgClasses[color]}`}
       style={{ boxShadow: `0 4px 0 0 ${shadow}` }}
     >
-      <span className="font-black text-sm md:text-base uppercase tracking-tight">
+      <span className="font-extrabold text-xs md:text-sm uppercase tracking-tight">
         {label}
       </span>
-      <span className="text-[10px] font-bold opacity-60 mt-0.5">{time}</span>
+      <span className="text-[10px] md:text-xs font-bold opacity-70 mt-1">
+        {time}
+      </span>
     </button>
   );
 }
