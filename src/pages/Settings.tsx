@@ -1,4 +1,4 @@
-import { useSettings } from '../contexts/SettingsContext';
+import { useSettings } from '../contexts/useSettings';
 
 export default function Settings() {
   const { showNotchMargin, setShowNotchMargin } = useSettings();

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useSettings } from "../contexts/SettingsContext";
+import { useSettings } from "../contexts/useSettings";
 
 export default function Decks() {
   const navigate = useNavigate();

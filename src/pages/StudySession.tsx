@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSettings } from "../contexts/SettingsContext";
+import { useSettings } from "../contexts/useSettings";
 
 // --- Types ---
 type QuestionFormat = "normal" | "mcq" | "blanks" | "match";
@@ -81,6 +81,7 @@ export default function StudySession() {
   const currentCard = mockQueue[currentIndex];
   const progress = (currentIndex / mockQueue.length) * 100;
 
+  /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     setIsRevealed(false);
     setSelectedOption(null);
@@ -88,6 +89,7 @@ export default function StudySession() {
     setSelectedMatchA(null);
     setMatchedPairs([]);
   }, [currentIndex]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleRate = (rating: string) => {
     console.log(`Card ${currentCard.id} rated: ${rating}`);
@@ -232,7 +234,7 @@ export default function StudySession() {
     const terms = card.pairs.map((p) => p.term);
     const matches = card.pairs.map((p) => p.match);
 
-    const handleMatchClick = (item: string, isTerm: boolean) => {
+    const handleMatchClick = (item: string) => {
       if (isRevealed) return;
       if (!selectedMatchA) {
         setSelectedMatchA(item);
@@ -266,7 +268,7 @@ export default function StudySession() {
               <button
                 key={term}
                 disabled={matchedPairs.includes(term) || isRevealed}
-                onClick={() => handleMatchClick(term, true)}
+                onClick={() => handleMatchClick(term)}
                 className={`w-full py-4 md:py-6 px-2 md:px-4 rounded-xl md:rounded-2xl border-2 font-bold text-sm md:text-base text-center transition-all ${
                   matchedPairs.includes(term)
                     ? "opacity-0"
@@ -284,7 +286,7 @@ export default function StudySession() {
               <button
                 key={match}
                 disabled={matchedPairs.includes(match) || isRevealed}
-                onClick={() => handleMatchClick(match, false)}
+                onClick={() => handleMatchClick(match)}
                 className={`w-full py-4 md:py-6 px-2 md:px-4 rounded-xl md:rounded-2xl border-2 font-bold text-sm md:text-base text-center transition-all ${
                   matchedPairs.includes(match)
                     ? "opacity-0"

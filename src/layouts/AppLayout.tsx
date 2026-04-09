@@ -1,5 +1,5 @@
 import { Outlet, useLocation, useNavigate, NavLink } from "react-router-dom";
-import { useSettings } from "../contexts/SettingsContext";
+import { useSettings } from "../contexts/useSettings";
 
 export default function AppLayout() {
   const location = useLocation();

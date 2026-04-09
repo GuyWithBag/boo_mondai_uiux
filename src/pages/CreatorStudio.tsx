@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSettings } from "../contexts/SettingsContext"; // Import useSettings
+import { useSettings } from "../contexts/useSettings";
 
 // --- Types ---
 type QuestionFormat = "normal" | "mcq" | "blanks" | "match";
