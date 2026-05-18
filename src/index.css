@@ -1,1 +1,88 @@
 @import "tailwindcss";
+
+/* 1. Theme Configuration */
+@theme {
+    /* Fonts: [Category]-[Concept] */
+    --font-family-sans: "Noto Sans", sans-serif;
+
+    /* Colors: [Category]-[Concept]-[Variant]-[State] */
+
+    /* Core Brand Concepts (Overridden to match Design System) */
+    --color-primary: #6366f1; /* Indigo 500 */
+    --color-primary-dark: #3f498a; /* Primary Shadow */
+    --color-primary-light: #c7d2fe; /* Ghost Outline/Shadow */
+
+    --color-streak: #f97316; /* Orange 500 */
+    --color-streak-dark: #c2410c; /* Fire Shadow */
+
+    /* Background Concept */
+    --color-background-page: #f8f9fa;
+    --color-background-surface: #ffffff;
+
+    /* Border Concept */
+    --color-border-neutral-subtle: #e5e7eb;
+
+    /* Feedback / Action Concept */
+    --color-action-success: #22c55e; /* Green 500 */
+    --color-action-success-light: #bbf7d0; /* Success Shadow */
+
+    --color-action-error: #ef4444; /* Red 500 */
+    --color-action-error-light: #fecaca; /* Error Shadow */
+
+    /* Radii: [Category]-[Concept]-[Scale] */
+    --radius-container-large: 40px; /* Maps to rounded-container-large */
+
+    /* Shadows: [Category]-[Concept]-[Variant] (The Tactile System) */
+    --shadow-tactile-primary-lg: 0 6px 0 0 var(--color-primary-dark);
+    --shadow-tactile-primary-sm: 0 4px 0 0 var(--color-primary-dark);
+
+    --shadow-tactile-secondary: 0 6px 0 0 var(--color-border-neutral-subtle);
+    --shadow-tactile-ghost: 0 4px 0 0 var(--color-primary-light);
+
+    --shadow-tactile-success: 0 4px 0 0 var(--color-action-success-light);
+    --shadow-tactile-error: 0 4px 0 0 var(--color-action-error-light);
+    --shadow-tactile-streak: 0 6px 0 0 var(--color-streak-dark);
+
+    /* Animations */
+    --animate-fade-in: fadeIn 0.3s ease-out;
+
+    @keyframes fadeIn {
+        0% {
+            opacity: 0;
+            transform: translateY(5px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+}
+
+/* 2. Custom Utility Classes */
+@layer utilities {
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    .no-scrollbar {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+
+    /* Standardized Tactile Interaction Loop */
+    .btn-tactile {
+        transition-property: transform, box-shadow, background-color;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 150ms;
+    }
+
+    .btn-tactile:active:not(:disabled) {
+        transform: translateY(4px);
+        box-shadow: 0 0px 0 0 transparent !important;
+    }
+
+    .btn-tactile:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
