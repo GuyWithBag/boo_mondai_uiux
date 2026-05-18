@@ -30,12 +30,14 @@ class TactileButton extends HookWidget {
     final pressed = useState(false);
     final tokens = context.themeTokens<AppTokens>();
     final disabled = onPressed == null;
-    final variants = <Object>[
-      tone,
-      size,
-      if (selected) TactileState.selected,
-      if (disabled) TactileState.disabled,
-    ];
+    final state = switch ((disabled, selected, tone)) {
+      (true, _, _) => TactileState.disabled,
+      (_, _, TactileTone.text) => TactileState.idle,
+      (_, true, _) => TactileState.selected,
+      _ => TactileState.idle,
+    };
+    final decorationVariants = <Object>[tone, state];
+    final textVariants = <Object>[tone, size];
 
     final padding = switch (size) {
       TactileSize.sm => const EdgeInsets.symmetric(
@@ -72,18 +74,18 @@ class TactileButton extends HookWidget {
       padding: padding,
       decoration: pressed.value && !disabled
           ? tactileButtonDecoration
-                .resolve(tokens, variants)
+                .resolve(tokens, decorationVariants)
                 .copyWith(boxShadow: const [])
-          : tactileButtonDecoration.resolve(tokens, variants),
+          : tactileButtonDecoration.resolve(tokens, decorationVariants),
       child: Opacity(
         opacity: disabled ? 0.5 : 1,
         child: IconTheme(
           data: IconThemeData(
-            color: tactileButtonText.resolve(tokens, variants).color,
+            color: tactileButtonText.resolve(tokens, textVariants).color,
             size: size == TactileSize.icon ? 22 : 18,
           ),
           child: DefaultTextStyle(
-            style: tactileButtonText.resolve(tokens, variants),
+            style: tactileButtonText.resolve(tokens, textVariants),
             textAlign: TextAlign.center,
             child: Row(
               mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
