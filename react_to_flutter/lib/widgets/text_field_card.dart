@@ -4,11 +4,14 @@ import 'package:theme_variants/theme_variants.dart';
 import '../theme/app_tokens.dart';
 import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
 
-import 'divider.dart';
 import 'tactile_button.dart';
 
-class EditorCard extends StatelessWidget {
-  const EditorCard({required this.title, required this.placeholder, super.key});
+class TextFieldCard extends StatelessWidget {
+  const TextFieldCard({
+    required this.title,
+    required this.placeholder,
+    super.key,
+  });
 
   final String title;
   final String placeholder;
@@ -50,13 +53,15 @@ class EditorCard extends StatelessWidget {
           ),
           Row(
             children: [
-              const TactileButton(
+              TactileButton(
+                onPressed: () {},
                 icon: Icons.image_outlined,
                 size: TactileSize.icon,
                 child: SizedBox.shrink(),
               ),
               SizedBox(width: tokens.spacePanelGapSm),
-              const TactileButton(
+              TactileButton(
+                onPressed: () {},
                 icon: Icons.mic,
                 size: TactileSize.icon,
                 child: SizedBox.shrink(),

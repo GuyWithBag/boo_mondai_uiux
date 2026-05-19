@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:react_to_flutter/widgets/text_field_card.dart';
 import 'package:theme_variants/theme_variants.dart';
 
 import '../theme/app_tokens.dart';
 import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
-import '../widgets/design_section.dart';
-import '../widgets/editor_card.dart';
+import '../widgets/segmented_control.dart';
 import '../widgets/tactile_button.dart';
 
 enum FormatType { normal, mcq, blanks, match }
 
 enum DirectionType { normal, reverse, both }
 
-class CreatorStudioPage extends HookWidget {
-  const CreatorStudioPage({super.key});
+class EditDeckPage extends HookWidget {
+  const EditDeckPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class CreatorStudioPage extends HookWidget {
                   final showSidebar = constraints.maxWidth >= 860.w;
                   return Row(
                     children: [
-                      if (showSidebar) const _CardSidebar(),
+                      if (showSidebar) const EditDeckSidebar(),
                       Expanded(
                         child: SingleChildScrollView(
                           padding: EdgeInsets.all(32.w),
@@ -88,10 +88,10 @@ class CreatorStudioPage extends HookWidget {
                                         tabController.animateTo(index);
                                       },
                                       children: const [
-                                        _FlashcardEditor(),
-                                        _McqEditor(),
-                                        _BlanksEditor(),
-                                        _MatchEditor(),
+                                        FlashcardEditor(),
+                                        MultipleChoiceEditor(),
+                                        FillInTheBlanks(),
+                                        MatchingTypeEditor(),
                                       ],
                                     ),
                                   ),
@@ -216,8 +216,8 @@ class _StudioHeader extends HookWidget {
   }
 }
 
-class _CardSidebar extends StatelessWidget {
-  const _CardSidebar();
+class EditDeckSidebar extends StatelessWidget {
+  const EditDeckSidebar();
 
   @override
   Widget build(BuildContext context) {
@@ -248,7 +248,8 @@ class _CardSidebar extends StatelessWidget {
                     ),
                   ),
                 ),
-                const TactileButton(
+                TactileButton(
+                  onPressed: () {},
                   icon: Icons.add,
                   size: TactileSize.icon,
                   child: SizedBox.shrink(),
@@ -259,62 +260,24 @@ class _CardSidebar extends StatelessWidget {
           Expanded(
             child: ListView(
               padding: EdgeInsets.all(16.w),
-              children: const [
-                _CardListTile(
+              children: [
+                TactileButton(
                   selected: true,
+                  onPressed: () {},
                   icon: Icons.slideshow_outlined,
-                  title: '勉強 (benkyou)',
+                  textAlign: TextAlign.left,
+                  tone: TactileTone.ghost,
+                  child: Text('勉強 (benkyou)'),
                 ),
                 SizedBox(height: 12),
-                _CardListTile(icon: Icons.list, title: 'Which particle is...'),
+                TactileButton(
+                  icon: Icons.list,
+                  onPressed: () {},
+                  textAlign: TextAlign.left,
+                  tone: TactileTone.text,
+                  child: Text('Which particle is...'),
+                ),
               ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _CardListTile extends StatelessWidget {
-  const _CardListTile({
-    required this.icon,
-    required this.title,
-    this.selected = false,
-  });
-
-  final IconData icon;
-  final String title;
-  final bool selected;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.themeTokens<AppTokens>();
-    final color = selected ? tokens.primary : tokens.textSecondary;
-
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: selected
-          ? tactileButtonDecoration.resolve(tokens, const [TactileTone.ghost])
-          : BoxDecoration(
-              color: tokens.backgroundSurface,
-              borderRadius: BorderRadius.circular(tokens.radius2xl),
-              border: Border.all(color: Colors.transparent, width: 2),
-            ),
-      child: Row(
-        children: [
-          Icon(icon, color: color),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: color,
-                fontSize: 14,
-                fontWeight: FontWeight.w800,
-              ),
             ),
           ),
         ],
@@ -338,27 +301,23 @@ class _FormatSelector extends StatelessWidget {
       (Icons.shuffle, 'Match Madness'),
     ];
 
-    return DesignSection(
-      title: '01. Question Format',
-      margin: EdgeInsets.zero,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            for (var index = 0; index < formats.length; index++) ...[
-              TactileButton(
-                icon: formats[index].$1,
-                selected: selectedIndex == index,
-                tone: selectedIndex == index
-                    ? TactileTone.ghost
-                    : TactileTone.secondary,
-                onPressed: () => onChanged(index),
-                child: Text(formats[index].$2),
-              ),
-              const SizedBox(width: 14),
-            ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          for (var index = 0; index < formats.length; index++) ...[
+            TactileButton(
+              icon: formats[index].$1,
+              selected: selectedIndex == index,
+              tone: selectedIndex == index
+                  ? TactileTone.ghost
+                  : TactileTone.secondary,
+              onPressed: () => onChanged(index),
+              child: Text(formats[index].$2),
+            ),
+            const SizedBox(width: 14),
           ],
-        ),
+        ],
       ),
     );
   }
@@ -378,10 +337,10 @@ class _DirectionSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.themeTokens<AppTokens>();
-    final options = [
-      (DirectionType.normal, 'Normal'),
-      (DirectionType.reverse, 'Reversed'),
-      (DirectionType.both, 'Both Ways'),
+    const options = [
+      SegmentOption(value: DirectionType.normal, label: 'Normal'),
+      SegmentOption(value: DirectionType.reverse, label: 'Reversed'),
+      SegmentOption(value: DirectionType.both, label: 'Both Ways'),
     ];
 
     return Surface(
@@ -411,23 +370,10 @@ class _DirectionSelector extends StatelessWidget {
               ],
             ),
           ),
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: tokens.softGray,
-              borderRadius: BorderRadius.circular(tokens.radius3xl),
-            ),
-            child: Wrap(
-              spacing: 8,
-              children: [
-                for (final option in options)
-                  _SegmentButton(
-                    label: option.$2,
-                    selected: selected == option.$1,
-                    onTap: () => onChanged(option.$1),
-                  ),
-              ],
-            ),
+          SegmentedControl<DirectionType>(
+            options: options,
+            value: selected,
+            onChanged: onChanged,
           ),
         ],
       ),
@@ -435,56 +381,15 @@ class _DirectionSelector extends StatelessWidget {
   }
 }
 
-class _SegmentButton extends StatelessWidget {
-  const _SegmentButton({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.themeTokens<AppTokens>();
-
-    return InkWell(
-      borderRadius: BorderRadius.circular(tokens.radius2xl),
-      onTap: onTap,
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        decoration: BoxDecoration(
-          color: selected ? tokens.backgroundSurface : Colors.transparent,
-          borderRadius: BorderRadius.circular(tokens.radius2xl),
-          border: Border.all(
-            color: selected ? tokens.borderNeutralSubtle : Colors.transparent,
-            width: 2,
-          ),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            color: selected ? tokens.textPrimary : tokens.textSecondary,
-            fontSize: 14,
-            fontWeight: FontWeight.w800,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class _FlashcardEditor extends StatelessWidget {
-  const _FlashcardEditor();
+class FlashcardEditor extends StatelessWidget {
+  const FlashcardEditor();
 
   @override
   Widget build(BuildContext context) {
     return const _ResponsiveTwoColumn(
       children: [
-        EditorCard(title: 'Front (Prompt)', placeholder: 'Type a word...'),
-        EditorCard(
+        TextFieldCard(title: 'Front (Prompt)', placeholder: 'Type a word...'),
+        TextFieldCard(
           title: 'Back (Answer)',
           placeholder: 'Type the translation...',
         ),
@@ -493,14 +398,17 @@ class _FlashcardEditor extends StatelessWidget {
   }
 }
 
-class _McqEditor extends StatelessWidget {
-  const _McqEditor();
+class MultipleChoiceEditor extends StatelessWidget {
+  const MultipleChoiceEditor();
 
   @override
   Widget build(BuildContext context) {
     return const _ResponsiveTwoColumn(
       children: [
-        EditorCard(title: 'Front (Prompt)', placeholder: 'Type a question...'),
+        TextFieldCard(
+          title: 'Front (Prompt)',
+          placeholder: 'Type a question...',
+        ),
         _McqOptionsPanel(),
       ],
     );
@@ -549,9 +457,9 @@ class _McqOptionsPanel extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 22),
-          const _McqOption(correct: true, value: 'To study'),
+          const MultipleChoiceOption(correct: true, value: 'To study'),
           const SizedBox(height: 14),
-          const _McqOption(value: 'To eat'),
+          const MultipleChoiceOption(value: 'To eat'),
           const Spacer(),
           const SizedBox(height: 20),
           TactileButton(
@@ -567,8 +475,8 @@ class _McqOptionsPanel extends StatelessWidget {
   }
 }
 
-class _McqOption extends HookWidget {
-  const _McqOption({required this.value, this.correct = false});
+class MultipleChoiceOption extends HookWidget {
+  const MultipleChoiceOption({required this.value, this.correct = false});
 
   final String value;
   final bool correct;
@@ -633,8 +541,8 @@ class _McqOption extends HookWidget {
   }
 }
 
-class _BlanksEditor extends StatelessWidget {
-  const _BlanksEditor();
+class FillInTheBlanks extends StatelessWidget {
+  const FillInTheBlanks();
 
   @override
   Widget build(BuildContext context) {
@@ -785,8 +693,8 @@ class _BlanksEditor extends StatelessWidget {
   }
 }
 
-class _MatchEditor extends StatelessWidget {
-  const _MatchEditor();
+class MatchingTypeEditor extends StatelessWidget {
+  const MatchingTypeEditor();
 
   @override
   Widget build(BuildContext context) {
@@ -853,12 +761,12 @@ class _MatchPair extends StatelessWidget {
       children: [
         Icon(Icons.drag_indicator, color: tokens.textMuted),
         const SizedBox(width: 12),
-        Expanded(child: _MatchInput(value: term)),
+        Expanded(child: MatchingTypeInput(value: term)),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 14),
           child: Icon(Icons.compare_arrows, color: tokens.textMuted),
         ),
-        Expanded(child: _MatchInput(value: match)),
+        Expanded(child: MatchingTypeInput(value: match)),
         IconButton(
           onPressed: () {},
           icon: Icon(Icons.delete, color: tokens.textMuted),
@@ -868,8 +776,8 @@ class _MatchPair extends StatelessWidget {
   }
 }
 
-class _MatchInput extends HookWidget {
-  const _MatchInput({required this.value});
+class MatchingTypeInput extends HookWidget {
+  const MatchingTypeInput({required this.value});
 
   final String value;
 

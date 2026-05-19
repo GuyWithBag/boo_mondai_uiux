@@ -15,6 +15,7 @@ class TactileButton extends HookWidget {
     this.selected = false,
     this.expand = false,
     super.key,
+    this.textAlign,
   });
 
   final Widget child;
@@ -24,6 +25,7 @@ class TactileButton extends HookWidget {
   final TactileSize size;
   final bool selected;
   final bool expand;
+  final TextAlign? textAlign;
 
   TactileState getState() {
     if (onPressed == null) {
@@ -68,10 +70,13 @@ class TactileButton extends HookWidget {
     final minSize = size == TactileSize.icon
         ? const Size.square(48)
         : Size.zero;
+    final rowAlignment = switch (textAlign) {
+      TextAlign.left || TextAlign.start => MainAxisAlignment.start,
+      TextAlign.right || TextAlign.end => MainAxisAlignment.end,
+      _ => MainAxisAlignment.center,
+    };
 
-    final content = AnimatedContainer(
-      duration: const Duration(milliseconds: 130),
-      curve: Curves.easeOutCubic,
+    final contentStyle = resolvedStyle.copyWith(
       transform: Matrix4.translationValues(
         0,
         state.value == TactileState.pressed &&
@@ -85,27 +90,25 @@ class TactileButton extends HookWidget {
         minHeight: minSize.height,
       ),
       padding: padding,
-      decoration: resolvedStyle.decoration,
-      child: Opacity(
-        opacity: state.value == TactileState.disabled ? 0.5 : 1,
-        child: IconTheme(
-          data: resolvedStyle.iconTheme,
-          child: DefaultTextStyle(
-            style: resolvedStyle.textStyle,
-            textAlign: TextAlign.center,
-            child: Row(
-              mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (icon != null) ...[
-                  Icon(icon),
-                  if (size != TactileSize.icon) const SizedBox(width: 10),
-                ],
-                if (size != TactileSize.icon) Flexible(child: child),
-              ],
-            ),
-          ),
-        ),
+      opacity: state.value == TactileState.disabled ? 0.5 : 1,
+      contentStyle: resolvedStyle.contentStyle.copyWith(textAlign: textAlign),
+    );
+
+    final content = Surface(
+      style: contentStyle,
+      duration: const Duration(milliseconds: 130),
+      curve: Curves.easeOutCubic,
+      child: Row(
+        mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
+        mainAxisAlignment: rowAlignment,
+        children: [
+          if (icon != null) ...[
+            Icon(icon),
+            if (size != TactileSize.icon) const SizedBox(width: 10),
+          ],
+          if (size != TactileSize.icon)
+            (expand ? Expanded(child: child) : Flexible(child: child)),
+        ],
       ),
     );
 

@@ -1,44 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
+import 'package:react_to_flutter/widgets/design_section.dart';
 import 'package:theme_variants/theme_variants.dart';
 
 import '../theme/app_tokens.dart';
 import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
 import '../widgets/color_bubble.dart';
-import '../widgets/design_section.dart';
 import '../widgets/tactile_button.dart';
-
-class _AppPanelCompat extends StatelessWidget {
-  const _AppPanelCompat({
-    required this.child,
-    this.tone = SurfaceTone.surface,
-    this.padding,
-    this.radius,
-  });
-
-  final Widget child;
-  final SurfaceTone tone;
-  final EdgeInsetsGeometry? padding;
-  final double? radius;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.themeTokens<AppTokens>();
-    final baseStyle = surfaceStyle.resolve(tokens, [tone]);
-    return Surface(
-      style: baseStyle.copyWith(
-        decoration: radius == null
-            ? baseStyle.decoration
-            : baseStyle.decoration.copyWith(
-                borderRadius: BorderRadius.circular(radius!),
-              ),
-        padding: padding ?? baseStyle.padding,
-      ),
-      child: child,
-    );
-  }
-}
 
 class DesignSystemPage extends HookWidget {
   const DesignSystemPage({super.key});
@@ -275,8 +244,8 @@ class _TypographySection extends StatelessWidget {
 
     return DesignSection(
       title: '03. Typography',
-      child: _AppPanelCompat(
-        padding: const EdgeInsets.all(36),
+      child: Surface(
+        style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -367,8 +336,8 @@ class _ProgressPathwaySection extends StatelessWidget {
 
     return DesignSection(
       title: '05. Progress Pathways',
-      child: _AppPanelCompat(
-        padding: const EdgeInsets.all(36),
+      child: Surface(
+        style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
         child: Column(
           children: [
             ConstrainedBox(
@@ -435,8 +404,8 @@ class _HeroTransitionSection extends StatelessWidget {
 
     return DesignSection(
       title: '06. Spatial Navigation',
-      child: _AppPanelCompat(
-        padding: const EdgeInsets.all(36),
+      child: Surface(
+        style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
         child: Column(
           children: [
             ConstrainedBox(
@@ -477,9 +446,8 @@ class _RoadmapSection extends StatelessWidget {
 
     return DesignSection(
       title: '07. Accessibility & Flutter Roadmap',
-      child: _AppPanelCompat(
-        tone: SurfaceTone.dark,
-        padding: const EdgeInsets.all(36),
+      child: Surface(
+        style: surfaceStyle.resolve(tokens, const [SurfaceTone.dark]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -535,8 +503,8 @@ class _InfoCard extends StatelessWidget {
       _ => tokens.primary,
     };
 
-    return _AppPanelCompat(
-      padding: const EdgeInsets.all(28),
+    return Surface(
+      style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -712,10 +680,8 @@ class _TransitionStateOne extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.themeTokens<AppTokens>();
-    return _AppPanelCompat(
-      tone: SurfaceTone.muted,
-      radius: 24,
-      padding: const EdgeInsets.all(22),
+    return Surface(
+      style: surfaceStyle.resolve(tokens, const [SurfaceTone.muted]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -752,9 +718,8 @@ class _TransitionStateTwo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.themeTokens<AppTokens>();
-    return _AppPanelCompat(
-      radius: 24,
-      padding: const EdgeInsets.all(22),
+    return Surface(
+      style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
       child: Column(
         children: [
           Text(

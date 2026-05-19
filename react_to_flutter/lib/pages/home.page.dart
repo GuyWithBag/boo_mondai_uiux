@@ -8,29 +8,14 @@ import '../theme/app_tokens.dart';
 import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
 import '../widgets/tactile_button.dart';
 
-class _AppPanelCompat extends StatelessWidget {
-  const _AppPanelCompat({required this.child, this.padding});
-
-  final Widget child;
-  final EdgeInsetsGeometry? padding;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.themeTokens<AppTokens>();
-    final baseStyle = surfaceStyle.resolve(tokens);
-    return Surface(
-      style: baseStyle.copyWith(padding: padding ?? baseStyle.padding),
-      child: child,
-    );
-  }
-}
-
 class HomePage extends HookWidget {
   const HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final tokens = context.themeTokens<AppTokens>();
+    final controller = context.themeVariantsController<AppTokens>();
+    final mode = controller.themeMode;
     final pages = useMemoized(
       () => const [
         _HomeDestination(
@@ -61,6 +46,34 @@ class HomePage extends HookWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  Wrap(
+                    spacing: 10.w,
+                    runSpacing: 10.h,
+                    children: [
+                      _ThemeModeButton(
+                        label: 'Light',
+                        icon: Icons.light_mode,
+                        selected: mode == ThemeMode.light,
+                        onPressed: () =>
+                            controller.setThemeMode(ThemeMode.light),
+                      ),
+                      _ThemeModeButton(
+                        label: 'Dark',
+                        icon: Icons.dark_mode,
+                        selected: mode == ThemeMode.dark,
+                        onPressed: () =>
+                            controller.setThemeMode(ThemeMode.dark),
+                      ),
+                      _ThemeModeButton(
+                        label: 'System',
+                        icon: Icons.settings_suggest,
+                        selected: mode == ThemeMode.system,
+                        onPressed: () =>
+                            controller.setThemeMode(ThemeMode.system),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20.h),
                   Container(
                     width: 56.w,
                     height: 56.w,
@@ -124,6 +137,32 @@ class HomePage extends HookWidget {
   }
 }
 
+class _ThemeModeButton extends StatelessWidget {
+  const _ThemeModeButton({
+    required this.label,
+    required this.icon,
+    required this.selected,
+    required this.onPressed,
+  });
+
+  final String label;
+  final IconData icon;
+  final bool selected;
+  final VoidCallback onPressed;
+
+  @override
+  Widget build(BuildContext context) {
+    return TactileButton(
+      tone: selected ? TactileTone.primary : TactileTone.secondary,
+      size: TactileSize.sm,
+      icon: icon,
+      selected: selected,
+      onPressed: onPressed,
+      child: Text(label),
+    );
+  }
+}
+
 class _DestinationCard extends HookWidget {
   const _DestinationCard({required this.destination});
 
@@ -141,8 +180,8 @@ class _DestinationCard extends HookWidget {
         duration: const Duration(milliseconds: 140),
         curve: Curves.easeOutCubic,
         scale: hovered.value ? 1.015 : 1,
-        child: _AppPanelCompat(
-          padding: EdgeInsets.all(28.w),
+        child: Surface(
+          style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

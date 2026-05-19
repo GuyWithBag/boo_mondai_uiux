@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:react_to_flutter/pages/edit_deck.local.page.dart';
 import 'package:theme_variants/theme_variants.dart';
 
-import 'pages/creator_studio_page.dart';
-import 'pages/design_system_page.dart';
-import 'pages/home_page.dart';
+import 'pages/design_system.page.dart';
+import 'pages/home.page.dart';
 import 'theme/app_theme.dart';
 import 'theme/app_tokens.dart';
 
@@ -26,7 +26,7 @@ class BooMondaiApp extends HookWidget {
           GoRoute(path: '/', builder: (context, state) => const HomePage()),
           GoRoute(
             path: '/creator',
-            builder: (context, state) => const CreatorStudioPage(),
+            builder: (context, state) => const EditDeckPage(),
           ),
           GoRoute(
             path: '/design-system',

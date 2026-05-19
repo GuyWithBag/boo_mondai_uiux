@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import 'package:react_to_flutter/theme/app_tokens.dart';
+import 'package:theme_variants/theme_variants.dart';
+
+enum SegmentControlOptionState { idle, selected, disabled }
+
+final segmentControlOptionStyle = VariantStyle.surfaceParts<AppTokens>(
+  base: (tokens) => {
+    SurfaceStylePart.padding(
+      const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+    ),
+    SurfaceStylePart.decoration({
+      DecorationPart.color(tokens.colorTransparent),
+      DecorationPart.borderRadius(BorderRadius.circular(tokens.radius2xl)),
+      DecorationPart.border(
+        Border.all(
+          color: tokens.colorTransparent,
+          width: tokens.borderWidthDefault,
+        ),
+      ),
+    }),
+    SurfaceStylePart.text({
+      TextStylePart.color(tokens.textSecondary),
+      TextStylePart.fontSize(tokens.fontSizeTextBody),
+      TextStylePart.fontWeight(tokens.fontWeightTextStrong),
+    }),
+  },
+  defaultVariants: const [SegmentControlOptionState.idle],
+  variants: {
+    SegmentControlOptionState.idle: (_) => const {},
+    SegmentControlOptionState.selected: (tokens) => {
+      SurfaceStylePart.decoration({
+        DecorationPart.color(tokens.backgroundSurface),
+        DecorationPart.border(
+          Border.all(
+            color: tokens.borderNeutralSubtle,
+            width: tokens.borderWidthDefault,
+          ),
+        ),
+      }),
+      SurfaceStylePart.text({TextStylePart.color(tokens.textPrimary)}),
+    },
+    SegmentControlOptionState.disabled: (tokens) => {
+      SurfaceStylePart.opacity(0.5),
+      SurfaceStylePart.text({TextStylePart.color(tokens.textMuted)}),
+    },
+  },
+);
