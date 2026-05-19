@@ -55,8 +55,8 @@ class BooMondaiApp extends HookWidget {
             return MaterialApp.router(
               debugShowCheckedModeBanner: false,
               title: 'BooMondai Flutter',
-              theme: controller.lightTheme().themeData,
-              darkTheme: controller.darkTheme().themeData,
+              theme: controller.getCurrentLightTheme().themeData,
+              darkTheme: controller.getCurrentDarkTheme().themeData,
               themeMode: controller.themeMode,
               routerConfig: router,
             );

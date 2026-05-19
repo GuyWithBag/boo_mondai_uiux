@@ -3,7 +3,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:theme_variants/theme_variants.dart';
 
 import '../theme/app_tokens.dart';
-import '../theme/app_variant_styles.dart';
+import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
 
 class TactileButton extends HookWidget {
   const TactileButton({
@@ -25,19 +25,29 @@ class TactileButton extends HookWidget {
   final bool selected;
   final bool expand;
 
+  TactileState getState() {
+    if (onPressed == null) {
+      return TactileState.disabled;
+    } else if (selected) {
+      return TactileState.selected;
+    } else {
+      return TactileState.idle;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final pressed = useState(false);
     final tokens = context.themeTokens<AppTokens>();
-    final disabled = onPressed == null;
-    final state = switch ((disabled, selected, tone)) {
-      (true, _, _) => TactileState.disabled,
-      (_, _, TactileTone.text) => TactileState.idle,
-      (_, true, _) => TactileState.selected,
-      _ => TactileState.idle,
-    };
-    final decorationVariants = <Object>[tone, state];
-    final textVariants = <Object>[tone, size];
+    final state = useState(getState());
+    useEffect(() {
+      state.value = getState();
+      return null;
+    }, [onPressed, selected, tone]);
+    final resolvedStyle = tactileButtonStyle.resolve(tokens, <Object>[
+      tone,
+      size,
+      state.value,
+    ]);
 
     final padding = switch (size) {
       TactileSize.sm => const EdgeInsets.symmetric(
@@ -64,7 +74,10 @@ class TactileButton extends HookWidget {
       curve: Curves.easeOutCubic,
       transform: Matrix4.translationValues(
         0,
-        pressed.value && !disabled ? 4 : 0,
+        state.value == TactileState.pressed &&
+                !(state.value == TactileState.disabled)
+            ? 4
+            : 0,
         0,
       ),
       constraints: BoxConstraints(
@@ -72,20 +85,13 @@ class TactileButton extends HookWidget {
         minHeight: minSize.height,
       ),
       padding: padding,
-      decoration: pressed.value && !disabled
-          ? tactileButtonDecoration
-                .resolve(tokens, decorationVariants)
-                .copyWith(boxShadow: const [])
-          : tactileButtonDecoration.resolve(tokens, decorationVariants),
+      decoration: resolvedStyle.decoration,
       child: Opacity(
-        opacity: disabled ? 0.5 : 1,
+        opacity: state.value == TactileState.disabled ? 0.5 : 1,
         child: IconTheme(
-          data: IconThemeData(
-            color: tactileButtonText.resolve(tokens, textVariants).color,
-            size: size == TactileSize.icon ? 22 : 18,
-          ),
+          data: resolvedStyle.iconTheme,
           child: DefaultTextStyle(
-            style: tactileButtonText.resolve(tokens, textVariants),
+            style: resolvedStyle.textStyle,
             textAlign: TextAlign.center,
             child: Row(
               mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
@@ -103,24 +109,87 @@ class TactileButton extends HookWidget {
       ),
     );
 
+    final paintedContent = tone == TactileTone.dashed
+        ? CustomPaint(
+            foregroundPainter: _DashedBorderPainter(
+              color: state.value == TactileState.hovered
+                  ? tokens.primary
+                  : tokens.borderNeutralSubtle,
+              radius: tokens.radius2xl,
+            ),
+            child: content,
+          )
+        : content;
+
     return MouseRegion(
-      cursor: disabled
+      cursor: state.value == TactileState.disabled
           ? SystemMouseCursors.forbidden
           : SystemMouseCursors.click,
+      onEnter: state.value == TactileState.disabled
+          ? null
+          : (_) => state.value = TactileState.hovered,
+      onExit: state.value == TactileState.disabled
+          ? null
+          : (_) => state.value = TactileState.idle,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTapDown: disabled ? null : (_) => pressed.value = true,
-        onTapCancel: disabled ? null : () => pressed.value = false,
-        onTapUp: disabled
+        onTapDown: state.value == TactileState.disabled
+            ? null
+            : (_) => state.value = TactileState.pressed,
+        onTapCancel: state.value == TactileState.disabled
+            ? null
+            : () => state.value = TactileState.idle,
+        onTapUp: state.value == TactileState.disabled
             ? null
             : (_) {
-                pressed.value = false;
                 onPressed?.call();
+                state.value = TactileState.hovered;
               },
         child: expand
-            ? SizedBox(width: double.infinity, child: content)
-            : content,
+            ? SizedBox(width: double.infinity, child: paintedContent)
+            : paintedContent,
       ),
     );
+  }
+}
+
+class _DashedBorderPainter extends CustomPainter {
+  const _DashedBorderPainter({required this.color, required this.radius});
+
+  static const _strokeWidth = 2.0;
+  static const _dashLength = 8.0;
+  static const _gapLength = 5.0;
+
+  final Color color;
+  final double radius;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = _strokeWidth;
+    final rect = Offset.zero & size;
+    final path = Path()
+      ..addRRect(
+        RRect.fromRectAndRadius(
+          rect.deflate(_strokeWidth / 2),
+          Radius.circular(radius),
+        ),
+      );
+
+    for (final metric in path.computeMetrics()) {
+      var distance = 0.0;
+      while (distance < metric.length) {
+        final end = (distance + _dashLength).clamp(0.0, metric.length);
+        canvas.drawPath(metric.extractPath(distance, end), paint);
+        distance += _dashLength + _gapLength;
+      }
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant _DashedBorderPainter oldDelegate) {
+    return color != oldDelegate.color || radius != oldDelegate.radius;
   }
 }

@@ -5,8 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:theme_variants/theme_variants.dart';
 
 import '../theme/app_tokens.dart';
-import '../theme/app_variant_styles.dart';
-import '../widgets/app_panel.dart';
+import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
 import '../widgets/design_section.dart';
 import '../widgets/editor_card.dart';
 import '../widgets/tactile_button.dart';
@@ -20,7 +19,11 @@ class CreatorStudioPage extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final format = useState(FormatType.normal);
+    final tabController = useTabController(
+      initialLength: FormatType.values.length,
+    );
+    final pageController = usePageController(initialPage: tabController.index);
+    final selectedFormatIndex = useState(tabController.index);
     final direction = useState(DirectionType.normal);
     final tokens = context.themeTokens<AppTokens>();
     final directionHint = switch (direction.value) {
@@ -53,10 +56,20 @@ class CreatorStudioPage extends HookWidget {
                                 crossAxisAlignment: CrossAxisAlignment.stretch,
                                 children: [
                                   _FormatSelector(
-                                    selected: format.value,
-                                    onChanged: (value) => format.value = value,
+                                    selectedIndex: selectedFormatIndex.value,
+                                    onChanged: (index) {
+                                      selectedFormatIndex.value = index;
+                                      tabController.animateTo(index);
+                                      pageController.animateToPage(
+                                        index,
+                                        duration: const Duration(
+                                          milliseconds: 220,
+                                        ),
+                                        curve: Curves.easeOutCubic,
+                                      );
+                                    },
                                   ),
-                                  if (format.value == FormatType.normal) ...[
+                                  if (selectedFormatIndex.value == 0) ...[
                                     SizedBox(height: 28.h),
                                     _DirectionSelector(
                                       selected: direction.value,
@@ -66,11 +79,20 @@ class CreatorStudioPage extends HookWidget {
                                     ),
                                   ],
                                   SizedBox(height: 42.h),
-                                  AnimatedSwitcher(
-                                    duration: const Duration(milliseconds: 220),
-                                    child: _EditorBody(
-                                      format: format.value,
-                                      key: ValueKey(format.value),
+                                  SizedBox(
+                                    height: 760.h,
+                                    child: PageView(
+                                      controller: pageController,
+                                      onPageChanged: (index) {
+                                        selectedFormatIndex.value = index;
+                                        tabController.animateTo(index);
+                                      },
+                                      children: const [
+                                        _FlashcardEditor(),
+                                        _McqEditor(),
+                                        _BlanksEditor(),
+                                        _MatchEditor(),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -302,18 +324,18 @@ class _CardListTile extends StatelessWidget {
 }
 
 class _FormatSelector extends StatelessWidget {
-  const _FormatSelector({required this.selected, required this.onChanged});
+  const _FormatSelector({required this.selectedIndex, required this.onChanged});
 
-  final FormatType selected;
-  final ValueChanged<FormatType> onChanged;
+  final int selectedIndex;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
     final formats = [
-      (FormatType.normal, Icons.slideshow_outlined, 'Flashcard'),
-      (FormatType.mcq, Icons.list, 'Multiple Choice'),
-      (FormatType.blanks, Icons.draw, 'Fill in Blanks'),
-      (FormatType.match, Icons.shuffle, 'Match Madness'),
+      (Icons.slideshow_outlined, 'Flashcard'),
+      (Icons.list, 'Multiple Choice'),
+      (Icons.draw, 'Fill in Blanks'),
+      (Icons.shuffle, 'Match Madness'),
     ];
 
     return DesignSection(
@@ -323,15 +345,15 @@ class _FormatSelector extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         child: Row(
           children: [
-            for (final item in formats) ...[
+            for (var index = 0; index < formats.length; index++) ...[
               TactileButton(
-                icon: item.$2,
-                selected: selected == item.$1,
-                tone: selected == item.$1
+                icon: formats[index].$1,
+                selected: selectedIndex == index,
+                tone: selectedIndex == index
                     ? TactileTone.ghost
                     : TactileTone.secondary,
-                onPressed: () => onChanged(item.$1),
-                child: Text(item.$3),
+                onPressed: () => onChanged(index),
+                child: Text(formats[index].$2),
               ),
               const SizedBox(width: 14),
             ],
@@ -362,8 +384,8 @@ class _DirectionSelector extends StatelessWidget {
       (DirectionType.both, 'Both Ways'),
     ];
 
-    return AppPanel(
-      padding: const EdgeInsets.all(24),
+    return Surface(
+      style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
       child: Wrap(
         spacing: 18,
         runSpacing: 18,
@@ -454,22 +476,6 @@ class _SegmentButton extends StatelessWidget {
   }
 }
 
-class _EditorBody extends StatelessWidget {
-  const _EditorBody({required this.format, super.key});
-
-  final FormatType format;
-
-  @override
-  Widget build(BuildContext context) {
-    return switch (format) {
-      FormatType.normal => const _FlashcardEditor(),
-      FormatType.mcq => const _McqEditor(),
-      FormatType.blanks => const _BlanksEditor(),
-      FormatType.match => const _MatchEditor(),
-    };
-  }
-}
-
 class _FlashcardEditor extends StatelessWidget {
   const _FlashcardEditor();
 
@@ -508,8 +514,8 @@ class _McqOptionsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = context.themeTokens<AppTokens>();
 
-    return AppPanel(
-      padding: const EdgeInsets.all(28),
+    return Surface(
+      style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -550,7 +556,7 @@ class _McqOptionsPanel extends StatelessWidget {
           const SizedBox(height: 20),
           TactileButton(
             icon: Icons.add,
-            tone: TactileTone.ghost,
+            tone: TactileTone.dashed,
             expand: true,
             onPressed: () {},
             child: const Text('Add Option'),
@@ -634,8 +640,8 @@ class _BlanksEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = context.themeTokens<AppTokens>();
 
-    return AppPanel(
-      padding: const EdgeInsets.all(36),
+    return Surface(
+      style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -651,10 +657,8 @@ class _BlanksEditor extends StatelessWidget {
                 .copyWith(fontSize: 17),
           ),
           const SizedBox(height: 28),
-          AppPanel(
-            tone: PanelTone.muted,
-            radius: 24,
-            padding: const EdgeInsets.all(24),
+          Surface(
+            style: surfaceStyle.resolve(tokens, const [SurfaceTone.muted]),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
@@ -725,10 +729,8 @@ class _BlanksEditor extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 14),
-          AppPanel(
-            tone: PanelTone.muted,
-            radius: 24,
-            padding: const EdgeInsets.all(16),
+          Surface(
+            style: surfaceStyle.resolve(tokens, const [SurfaceTone.muted]),
             child: Row(
               children: [
                 Container(
@@ -790,8 +792,8 @@ class _MatchEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = context.themeTokens<AppTokens>();
 
-    return AppPanel(
-      padding: const EdgeInsets.all(36),
+    return Surface(
+      style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -826,7 +828,7 @@ class _MatchEditor extends StatelessWidget {
           const SizedBox(height: 28),
           TactileButton(
             icon: Icons.add,
-            tone: TactileTone.ghost,
+            tone: TactileTone.dashed,
             expand: true,
             onPressed: () {},
             child: const Text('Add Pair'),

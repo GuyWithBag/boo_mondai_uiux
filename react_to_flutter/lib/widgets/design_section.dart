@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:theme_variants/theme_variants.dart';
 
 import '../theme/app_tokens.dart';
-import '../theme/app_variant_styles.dart';
+import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
 
 class DesignSection extends StatelessWidget {
   const DesignSection({

@@ -5,9 +5,25 @@ import 'package:go_router/go_router.dart';
 import 'package:theme_variants/theme_variants.dart';
 
 import '../theme/app_tokens.dart';
-import '../theme/app_variant_styles.dart';
-import '../widgets/app_panel.dart';
+import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
 import '../widgets/tactile_button.dart';
+
+class _AppPanelCompat extends StatelessWidget {
+  const _AppPanelCompat({required this.child, this.padding});
+
+  final Widget child;
+  final EdgeInsetsGeometry? padding;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.themeTokens<AppTokens>();
+    final baseStyle = surfaceStyle.resolve(tokens);
+    return Surface(
+      style: baseStyle.copyWith(padding: padding ?? baseStyle.padding),
+      child: child,
+    );
+  }
+}
 
 class HomePage extends HookWidget {
   const HomePage({super.key});
@@ -125,7 +141,7 @@ class _DestinationCard extends HookWidget {
         duration: const Duration(milliseconds: 140),
         curve: Curves.easeOutCubic,
         scale: hovered.value ? 1.015 : 1,
-        child: AppPanel(
+        child: _AppPanelCompat(
           padding: EdgeInsets.all(28.w),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

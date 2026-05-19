@@ -38,7 +38,6 @@ dependencies:
   theme_variants:
     git:
       url: https://github.com/GuyWithBag/theme_variants.git
-      ref: 573f6de
 
   # State & UI
   provider: ^6.1.2
@@ -87,12 +86,12 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+  fonts:
+    - family: Noto Sans
+      fonts:
+        - asset: fonts/noto_sans/NotoSans-VariableFont_wdth,wght.ttf
+        - asset: fonts/noto_sans/NotoSans-Italic-VariableFont_wdth,wght.ttf
+          style: italic
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf

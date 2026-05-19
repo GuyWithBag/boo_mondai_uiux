@@ -273,11 +273,11 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "573f6de"
-      resolved-ref: "573f6de4c40299b11522c1490da382a228a91f77"
+      ref: HEAD
+      resolved-ref: c835a8c19b5b1d8bda3402e0d7c68a0d34f81514
       url: "https://github.com/GuyWithBag/theme_variants.git"
     source: git
-    version: "0.0.1"
+    version: "0.1.0"
   vector_math:
     dependency: transitive
     description:

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:theme_variants/theme_variants.dart';
 
 import '../theme/app_tokens.dart';
-import '../theme/app_variant_styles.dart';
+import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
+
+import 'divider.dart';
 import 'tactile_button.dart';
 
 class EditorCard extends StatelessWidget {
@@ -14,15 +16,10 @@ class EditorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.themeTokens<AppTokens>();
+    final resolvedSurfaceStyle = surfaceStyle.resolve(tokens);
 
-    return Container(
-      constraints: const BoxConstraints(minHeight: 350),
-      padding: const EdgeInsets.all(28),
-      decoration: panelDecoration
-          .resolve(tokens)
-          .copyWith(
-            borderRadius: BorderRadius.circular(tokens.radiusContainerLarge),
-          ),
+    return Surface(
+      style: resolvedSurfaceStyle,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,7 +27,7 @@ class EditorCard extends StatelessWidget {
             title.toUpperCase(),
             style: appTextStyle.resolve(tokens, [AppTextRole.eyebrow]),
           ),
-          const SizedBox(height: 24),
+          SizedBox(height: tokens.spacePanelGapLg),
           Expanded(
             child: TextField(
               maxLines: null,
@@ -38,36 +35,33 @@ class EditorCard extends StatelessWidget {
               textAlignVertical: TextAlignVertical.top,
               style: TextStyle(
                 color: tokens.textPrimary,
-                fontSize: 30,
-                fontWeight: FontWeight.w800,
-                height: 1.15,
+                fontSize: tokens.fontSizeFieldDisplay,
+                fontWeight: tokens.fontWeightTextStrong,
+                height: tokens.lineHeightFieldDisplay,
               ),
               decoration: InputDecoration.collapsed(hintText: placeholder),
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 18),
-            padding: const EdgeInsets.only(top: 18),
-            decoration: BoxDecoration(
-              border: Border(
-                top: BorderSide(color: tokens.borderNeutralSubtle, width: 2),
+          Column(
+            children: [
+              Divider(),
+              SizedBox(height: tokens.spacePanelGapMd),
+            ],
+          ),
+          Row(
+            children: [
+              const TactileButton(
+                icon: Icons.image_outlined,
+                size: TactileSize.icon,
+                child: SizedBox.shrink(),
               ),
-            ),
-            child: const Row(
-              children: [
-                TactileButton(
-                  icon: Icons.image_outlined,
-                  size: TactileSize.icon,
-                  child: SizedBox.shrink(),
-                ),
-                SizedBox(width: 12),
-                TactileButton(
-                  icon: Icons.mic,
-                  size: TactileSize.icon,
-                  child: SizedBox.shrink(),
-                ),
-              ],
-            ),
+              SizedBox(width: tokens.spacePanelGapSm),
+              const TactileButton(
+                icon: Icons.mic,
+                size: TactileSize.icon,
+                child: SizedBox.shrink(),
+              ),
+            ],
           ),
         ],
       ),

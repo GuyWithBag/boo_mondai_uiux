@@ -4,11 +4,41 @@ import 'package:go_router/go_router.dart';
 import 'package:theme_variants/theme_variants.dart';
 
 import '../theme/app_tokens.dart';
-import '../theme/app_variant_styles.dart';
-import '../widgets/app_panel.dart';
+import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
 import '../widgets/color_bubble.dart';
 import '../widgets/design_section.dart';
 import '../widgets/tactile_button.dart';
+
+class _AppPanelCompat extends StatelessWidget {
+  const _AppPanelCompat({
+    required this.child,
+    this.tone = SurfaceTone.surface,
+    this.padding,
+    this.radius,
+  });
+
+  final Widget child;
+  final SurfaceTone tone;
+  final EdgeInsetsGeometry? padding;
+  final double? radius;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.themeTokens<AppTokens>();
+    final baseStyle = surfaceStyle.resolve(tokens, [tone]);
+    return Surface(
+      style: baseStyle.copyWith(
+        decoration: radius == null
+            ? baseStyle.decoration
+            : baseStyle.decoration.copyWith(
+                borderRadius: BorderRadius.circular(radius!),
+              ),
+        padding: padding ?? baseStyle.padding,
+      ),
+      child: child,
+    );
+  }
+}
 
 class DesignSystemPage extends HookWidget {
   const DesignSystemPage({super.key});
@@ -245,7 +275,7 @@ class _TypographySection extends StatelessWidget {
 
     return DesignSection(
       title: '03. Typography',
-      child: AppPanel(
+      child: _AppPanelCompat(
         padding: const EdgeInsets.all(36),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -337,7 +367,7 @@ class _ProgressPathwaySection extends StatelessWidget {
 
     return DesignSection(
       title: '05. Progress Pathways',
-      child: AppPanel(
+      child: _AppPanelCompat(
         padding: const EdgeInsets.all(36),
         child: Column(
           children: [
@@ -405,7 +435,7 @@ class _HeroTransitionSection extends StatelessWidget {
 
     return DesignSection(
       title: '06. Spatial Navigation',
-      child: AppPanel(
+      child: _AppPanelCompat(
         padding: const EdgeInsets.all(36),
         child: Column(
           children: [
@@ -447,8 +477,8 @@ class _RoadmapSection extends StatelessWidget {
 
     return DesignSection(
       title: '07. Accessibility & Flutter Roadmap',
-      child: AppPanel(
-        tone: PanelTone.dark,
+      child: _AppPanelCompat(
+        tone: SurfaceTone.dark,
         padding: const EdgeInsets.all(36),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -505,7 +535,7 @@ class _InfoCard extends StatelessWidget {
       _ => tokens.primary,
     };
 
-    return AppPanel(
+    return _AppPanelCompat(
       padding: const EdgeInsets.all(28),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -682,8 +712,8 @@ class _TransitionStateOne extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.themeTokens<AppTokens>();
-    return AppPanel(
-      tone: PanelTone.muted,
+    return _AppPanelCompat(
+      tone: SurfaceTone.muted,
       radius: 24,
       padding: const EdgeInsets.all(22),
       child: Column(
@@ -722,7 +752,7 @@ class _TransitionStateTwo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final tokens = context.themeTokens<AppTokens>();
-    return AppPanel(
+    return _AppPanelCompat(
       radius: 24,
       padding: const EdgeInsets.all(22),
       child: Column(
