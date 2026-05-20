@@ -3,9 +3,6 @@ import 'package:theme_variants/theme_variants.dart';
 
 import 'app_tokens.dart';
 
-const _lightTokens = defaultLight;
-const _darkTokens = defaultDark;
-
 ThemeData _themeData(AppTokens tokens, Brightness brightness) {
   final scheme = ColorScheme.fromSeed(
     seedColor: tokens.primary,
@@ -20,7 +17,23 @@ ThemeData _themeData(AppTokens tokens, Brightness brightness) {
     brightness: brightness,
     colorScheme: scheme,
     scaffoldBackgroundColor: tokens.backgroundPage,
-    fontFamily: tokens.fontFamilySans,
+    fontFamily: tokens.fontFamily,
+    appBarTheme: AppBarTheme(
+      backgroundColor: tokens.backgroundSurface,
+      foregroundColor: tokens.textPrimary,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      surfaceTintColor: Colors.transparent,
+      toolbarHeight: 88,
+      titleSpacing: 0,
+      shape: Border(
+        bottom: BorderSide(
+          color: tokens.borderNeutralSubtle,
+          width: tokens.borderWidthDefault,
+        ),
+      ),
+    ),
+    textTheme: TextTheme(),
     dividerTheme: DividerThemeData(
       color: tokens.borderNeutralSubtle,
       thickness: tokens.borderWidthDefault,
@@ -42,15 +55,15 @@ ThemeData _themeData(AppTokens tokens, Brightness brightness) {
 final booMondaiLight = ThemeVariant<AppTokens>(
   themePresetId: 'boomondai',
   brightness: ThemeVariantBrightness.light,
-  themeData: _themeData(_lightTokens, Brightness.light),
-  tokens: _lightTokens,
+  themeData: _themeData(defaultLight, Brightness.light),
+  tokens: defaultLight,
 );
 
 final booMondaiDark = ThemeVariant<AppTokens>(
   themePresetId: 'boomondai',
   brightness: ThemeVariantBrightness.dark,
-  themeData: _themeData(_darkTokens, Brightness.dark),
-  tokens: _darkTokens,
+  themeData: _themeData(defaultDark, Brightness.dark),
+  tokens: defaultDark,
 );
 
 final booMondaiPreset = LightDarkThemePreset<AppTokens>(

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:react_to_flutter/theme/app_tokens.dart';
 import 'package:theme_variants/theme_variants.dart';
 
@@ -21,7 +22,7 @@ final segmentControlOptionStyle = VariantStyle.surfaceParts<AppTokens>(
     }),
     SurfaceStylePart.text({
       TextStylePart.color(tokens.textSecondary),
-      TextStylePart.fontSize(tokens.fontSizeTextBody),
+      TextStylePart.fontSize(tokens.textSizeLabel.sp),
       TextStylePart.fontWeight(tokens.fontWeightTextStrong),
     }),
   },

@@ -1,265 +1,318 @@
 import 'package:flutter/material.dart';
 
-class AppTokens {
-  const AppTokens({
-    required this.name,
-    required this.fontFamilySans,
-    required this.primary,
-    required this.primaryDark,
-    required this.primaryLight,
-    required this.streak,
-    required this.streakDark,
-    required this.backgroundPage,
-    required this.backgroundSurface,
-    required this.borderNeutralSubtle,
-    required this.actionSuccess,
-    required this.actionSuccessLight,
-    required this.actionError,
-    required this.actionErrorLight,
-    required this.radiusContainerLarge,
-    required this.radiusXl,
-    required this.radius2xl,
-    required this.radius3xl,
-    required this.shadowPrimaryLgOffset,
-    required this.shadowPrimarySmOffset,
-    required this.shadowSecondaryOffset,
-    required this.shadowGhostOffset,
-    required this.shadowFeedbackOffset,
-    required this.shadowStreakOffset,
-    required this.textPrimary,
-    required this.textSecondary,
-    required this.textMuted,
-    required this.softGray,
-    required this.indigoSoft,
-    required this.greenSoft,
-    required this.redSoft,
-    required this.orangeSoft,
-    required this.borderWidthDefault,
-    required this.spacePanelPadding,
-    required this.spacePanelGapLg,
-    required this.spacePanelGapMd,
-    required this.spacePanelGapSm,
-    required this.spaceControlGapMd,
-    required this.sizePanelMinHeightMd,
-    required this.fontSizeTextEyebrow,
-    required this.fontSizeTextBody,
-    required this.fontSizeTextMuted,
-    required this.fontSizeTextTitle,
-    required this.fontSizeTextDisplay,
-    required this.fontSizeFieldDisplay,
-    required this.fontSizeTactileSm,
-    required this.fontSizeTactileMd,
-    required this.fontSizeTactileLg,
-    required this.fontSizeTactileIcon,
-    required this.fontWeightTextBase,
-    required this.fontWeightTextBody,
-    required this.fontWeightTextStrong,
-    required this.fontWeightTextHeavy,
-    required this.lineHeightTextBody,
-    required this.lineHeightTextTitle,
-    required this.lineHeightTextDisplay,
-    required this.lineHeightFieldDisplay,
-    required this.lineHeightTactile,
-    required this.letterSpacingTextEyebrow,
-    required this.sizeIconMd,
-    required this.sizeIconLg,
-    required this.colorTransparent,
-    required this.colorTextOnBrand,
-  });
+/*
+Token naming guide
 
-  final String name;
-  final String fontFamilySans;
-  final Color primary;
-  final Color primaryDark;
-  final Color primaryLight;
-  final Color streak;
-  final Color streakDark;
-  final Color backgroundPage;
-  final Color backgroundSurface;
-  final Color borderNeutralSubtle;
-  final Color actionSuccess;
-  final Color actionSuccessLight;
-  final Color actionError;
-  final Color actionErrorLight;
-  final double radiusContainerLarge;
-  final double radiusXl;
-  final double radius2xl;
-  final double radius3xl;
-  final double shadowPrimaryLgOffset;
-  final double shadowPrimarySmOffset;
-  final double shadowSecondaryOffset;
-  final double shadowGhostOffset;
-  final double shadowFeedbackOffset;
-  final double shadowStreakOffset;
-  final Color textPrimary;
-  final Color textSecondary;
-  final Color textMuted;
-  final Color softGray;
-  final Color indigoSoft;
-  final Color greenSoft;
-  final Color redSoft;
-  final Color orangeSoft;
-  final double borderWidthDefault;
-  final double spacePanelPadding;
-  final double spacePanelGapLg;
-  final double spacePanelGapMd;
-  final double spacePanelGapSm;
-  final double spaceControlGapMd;
-  final double sizePanelMinHeightMd;
-  final double fontSizeTextEyebrow;
-  final double fontSizeTextBody;
-  final double fontSizeTextMuted;
-  final double fontSizeTextTitle;
-  final double fontSizeTextDisplay;
-  final double fontSizeFieldDisplay;
-  final double fontSizeTactileSm;
-  final double fontSizeTactileMd;
-  final double fontSizeTactileLg;
-  final double fontSizeTactileIcon;
-  final FontWeight fontWeightTextBase;
-  final FontWeight fontWeightTextBody;
-  final FontWeight fontWeightTextStrong;
-  final FontWeight fontWeightTextHeavy;
-  final double lineHeightTextBody;
-  final double lineHeightTextTitle;
-  final double lineHeightTextDisplay;
-  final double lineHeightFieldDisplay;
-  final double lineHeightTactile;
-  final double letterSpacingTextEyebrow;
-  final double sizeIconMd;
-  final double sizeIconLg;
-  final Color colorTransparent;
-  final Color colorTextOnBrand;
-}
+Use names that describe purpose, not just value.
 
-const AppTokens defaultLight = AppTokens(
+Good:
+textSizeLabelSmall = 10
+textSizeLabel = 14
+textSizeLabelLarge = 16
+textSizeHeader = 24
+textSizeBodyLarge = 30
+
+Avoid:
+textSize10
+fontSmall
+bigText
+
+Prefer this order:
+category + property + role + scale
+
+Examples:
+textSizeLabelSmall
+textSizeBodyLarge
+fontWeightTextStrong
+lineHeightTextBody
+spacePanelGapLg
+shadowPrimaryLgOffset
+radiusContainerLarge
+borderWidthDefault
+
+Color tokens should describe use.
+
+Good:
+backgroundPage
+backgroundSurface
+textPrimary
+textSecondary
+textMuted
+borderNeutralSubtle
+actionSuccess
+actionError
+
+Avoid:
+gray100
+blue500
+green
+red
+
+Use scale words only when the token is part of a real scale.
+
+Good:
+spacePanelGapSm
+spacePanelGapMd
+spacePanelGapLg
+sizeIconMd
+sizeIconLg
+radius2xl
+radius3xl
+
+Avoid adding scale names if there is only one value:
+spacePanelGapDefault
+iconSizeDefault
+
+Component-specific values should stay with the component first.
+Promote them into AppTokens only when several components reuse the same idea.
+
+Good global token:
+borderWidthDefault
+
+Better kept local until reused:
+matchingTypeInputBorderWidth
+tactileButtonPressedYOffset
+*/
+
+typedef AppTokens = ({
+  String name,
+  String fontFamily,
+  Color primary,
+  Color primaryDark,
+  Color primaryLight,
+  Color streak,
+  Color streakDark,
+  Color backgroundPage,
+  Color backgroundSurface,
+  Color borderNeutralSubtle,
+  Color actionSuccess,
+  Color actionError,
+  double radiusContainerLarge,
+  double radius2xl,
+  double radius3xl,
+  double shadowPrimaryLgOffset,
+  double shadowSecondaryOffset,
+  double shadowGhostOffset,
+  double shadowFeedbackOffset,
+  double shadowStreakOffset,
+  Color textPrimary,
+  Color textSecondary,
+  Color textMuted,
+  Color softGray,
+  Color primarySoft,
+  Color greenSoft,
+  Color ratingAgainBackground,
+  Color ratingAgainText,
+  Color ratingAgainBorder,
+  Color ratingAgainHoverBackground,
+  Color ratingHardBackground,
+  Color ratingHardText,
+  Color ratingHardBorder,
+  Color ratingHardHoverBackground,
+  Color ratingGoodBackground,
+  Color ratingGoodText,
+  Color ratingGoodBorder,
+  Color ratingGoodHoverBackground,
+  Color ratingEasyBackground,
+  Color ratingEasyText,
+  Color ratingEasyBorder,
+  Color ratingEasyHoverBackground,
+  double borderWidthDefault,
+  double spacePanelPadding,
+  double spacePanelGapLg,
+  double spacePanelGapMd,
+  double spacePanelGapSm,
+  double textSizeHeader,
+  double textSizeLabelLarge,
+  double textSizeLabel,
+  double textSizeLabelSmall,
+  double textSizeBodyLarge,
+  FontWeight fontWeightTextBase,
+  FontWeight fontWeightTextBody,
+  FontWeight fontWeightTextStrong,
+  FontWeight fontWeightTextHeavy,
+  double lineHeightTextBody,
+  double lineHeightTextTitle,
+  double lineHeightTextDisplay,
+  double lineHeightFieldDisplay,
+  double lineHeightTactile,
+  double letterSpacingTextEyebrow,
+  double sizeIconMd,
+  double sizeIconLg,
+  Color colorTransparent,
+  Color colorTextOnBrand,
+});
+
+final String fontFamily = 'Noto Sans';
+final double radiusContainerLarge = 40;
+final double radius2xl = 16;
+final double radius3xl = 24;
+final double shadowPrimaryLgOffset = 6;
+final double shadowSecondaryOffset = 6;
+final double shadowGhostOffset = 4;
+final double shadowFeedbackOffset = 4;
+final double shadowStreakOffset = 6;
+final double borderWidthDefault = 2;
+final double spacePanelPadding = 28;
+final double spacePanelGapLg = 24;
+final double spacePanelGapMd = 18;
+final double spacePanelGapSm = 12;
+
+final double textSizeHeader = 24;
+final double textSizeLabelLarge = 16;
+final double textSizeLabel = 14;
+final double textSizeLabelSmall = 10;
+final double textSizeBodyLarge = 30;
+
+final FontWeight fontWeightTextBase = FontWeight.w700;
+final FontWeight fontWeightTextBody = FontWeight.w600;
+final FontWeight fontWeightTextStrong = FontWeight.w800;
+final FontWeight fontWeightTextHeavy = FontWeight.w900;
+final double lineHeightTextBody = 1.45;
+final double lineHeightTextTitle = 1.1;
+final double lineHeightTextDisplay = 1.05;
+final double lineHeightFieldDisplay = 1.15;
+final double lineHeightTactile = 1.1;
+final double letterSpacingTextEyebrow = 1.6;
+final double sizeIconMd = 18;
+final double sizeIconLg = 24;
+final Color colorTransparent = Colors.transparent;
+final Color colorTextOnBrand = Colors.white;
+
+final AppTokens defaultLight = (
   name: 'BooMondai Light',
-  fontFamilySans: 'Noto Sans',
+  fontFamily: fontFamily,
   primary: Color(0xff6366f1),
   primaryDark: Color(0xff3f498a),
   primaryLight: Color(0xffc7d2fe),
+  primarySoft: Color(0xffeef2ff),
   streak: Color(0xfff97316),
   streakDark: Color(0xffc2410c),
   backgroundPage: Color(0xfff8f9fa),
   backgroundSurface: Color(0xffffffff),
   borderNeutralSubtle: Color(0xffe5e7eb),
   actionSuccess: Color(0xff22c55e),
-  actionSuccessLight: Color(0xffbbf7d0),
   actionError: Color(0xffef4444),
-  actionErrorLight: Color(0xfffecaca),
-  radiusContainerLarge: 40,
-  radiusXl: 12,
-  radius2xl: 16,
-  radius3xl: 24,
-  shadowPrimaryLgOffset: 6,
-  shadowPrimarySmOffset: 4,
-  shadowSecondaryOffset: 6,
-  shadowGhostOffset: 4,
-  shadowFeedbackOffset: 4,
-  shadowStreakOffset: 6,
   textPrimary: Color(0xff111827),
   textSecondary: Color(0xff6b7280),
   textMuted: Color(0xff9ca3af),
   softGray: Color(0xfff3f4f6),
-  indigoSoft: Color(0xffeef2ff),
   greenSoft: Color(0xfff0fdf4),
-  redSoft: Color(0xfffef2f2),
-  orangeSoft: Color(0xfffff7ed),
-  borderWidthDefault: 2,
-  spacePanelPadding: 28,
-  spacePanelGapLg: 24,
-  spacePanelGapMd: 18,
-  spacePanelGapSm: 12,
-  spaceControlGapMd: 10,
-  sizePanelMinHeightMd: 350,
-  fontSizeTextEyebrow: 10,
-  fontSizeTextBody: 14,
-  fontSizeTextMuted: 12,
-  fontSizeTextTitle: 22,
-  fontSizeTextDisplay: 36,
-  fontSizeFieldDisplay: 30,
-  fontSizeTactileSm: 14,
-  fontSizeTactileMd: 16,
-  fontSizeTactileLg: 18,
-  fontSizeTactileIcon: 0,
-  fontWeightTextBase: FontWeight.w700,
-  fontWeightTextBody: FontWeight.w600,
-  fontWeightTextStrong: FontWeight.w800,
-  fontWeightTextHeavy: FontWeight.w900,
-  lineHeightTextBody: 1.45,
-  lineHeightTextTitle: 1.1,
-  lineHeightTextDisplay: 1.05,
-  lineHeightFieldDisplay: 1.15,
-  lineHeightTactile: 1.1,
-  letterSpacingTextEyebrow: 1.6,
-  sizeIconMd: 18,
-  sizeIconLg: 22,
-  colorTransparent: Colors.transparent,
-  colorTextOnBrand: Colors.white,
+  ratingAgainBackground: Color(0xfffef2f2),
+  ratingAgainText: Color(0xfff44336),
+  ratingAgainBorder: Color(0xfffecaca),
+  ratingAgainHoverBackground: Color(0xfffee2e2),
+  ratingHardBackground: Color(0xfffff7ed),
+  ratingHardText: Color(0xffff9800),
+  ratingHardBorder: Color(0xfffed7aa),
+  ratingHardHoverBackground: Color(0xffffedd5),
+  ratingGoodBackground: Color(0xfff0fdf4),
+  ratingGoodText: Color(0xff4caf50),
+  ratingGoodBorder: Color(0xffbbf7d0),
+  ratingGoodHoverBackground: Color(0xffdcfce7),
+  ratingEasyBackground: Color(0xffeff6ff),
+  ratingEasyText: Color(0xff2196f3),
+  ratingEasyBorder: Color(0xffbfdbfe),
+  ratingEasyHoverBackground: Color(0xffdbeafe),
+  radiusContainerLarge: radiusContainerLarge,
+  radius2xl: radius2xl,
+  radius3xl: radius3xl,
+  shadowPrimaryLgOffset: shadowPrimaryLgOffset,
+  shadowSecondaryOffset: shadowSecondaryOffset,
+  shadowGhostOffset: shadowGhostOffset,
+  shadowFeedbackOffset: shadowFeedbackOffset,
+  shadowStreakOffset: shadowStreakOffset,
+  borderWidthDefault: borderWidthDefault,
+  spacePanelPadding: spacePanelPadding,
+  spacePanelGapLg: spacePanelGapLg,
+  spacePanelGapMd: spacePanelGapMd,
+  spacePanelGapSm: spacePanelGapSm,
+  textSizeHeader: textSizeHeader,
+  textSizeLabelLarge: textSizeLabelLarge,
+  textSizeLabel: textSizeLabel,
+  textSizeLabelSmall: textSizeLabelSmall,
+  textSizeBodyLarge: textSizeBodyLarge,
+  fontWeightTextBase: fontWeightTextBase,
+  fontWeightTextBody: fontWeightTextBody,
+  fontWeightTextStrong: fontWeightTextStrong,
+  fontWeightTextHeavy: fontWeightTextHeavy,
+  lineHeightTextBody: lineHeightTextBody,
+  lineHeightTextTitle: lineHeightTextTitle,
+  lineHeightTextDisplay: lineHeightTextDisplay,
+  lineHeightFieldDisplay: lineHeightFieldDisplay,
+  lineHeightTactile: lineHeightTactile,
+  letterSpacingTextEyebrow: letterSpacingTextEyebrow,
+  sizeIconMd: sizeIconMd,
+  sizeIconLg: sizeIconLg,
+  colorTransparent: colorTransparent,
+  colorTextOnBrand: colorTextOnBrand,
 );
 
-const AppTokens defaultDark = AppTokens(
+final AppTokens defaultDark = (
   name: 'BooMondai Dark',
-  fontFamilySans: 'Noto Sans',
-  primary: Color(0xff818cf8),
-  primaryDark: Color(0xff4f46e5),
+  fontFamily: fontFamily,
+  primary: Color(0xff6366f1),
+  primaryDark: Color(0xff3f498a),
   primaryLight: Color(0xff3730a3),
+  primarySoft: Color(0xff312e81),
   streak: Color(0xfffb923c),
   streakDark: Color(0xffea580c),
   backgroundPage: Color(0xff0b1020),
   backgroundSurface: Color(0xff111827),
   borderNeutralSubtle: Color(0xff374151),
   actionSuccess: Color(0xff4ade80),
-  actionSuccessLight: Color(0xff14532d),
   actionError: Color(0xfff87171),
-  actionErrorLight: Color(0xff7f1d1d),
-  radiusContainerLarge: 40,
-  radiusXl: 12,
-  radius2xl: 16,
-  radius3xl: 24,
-  shadowPrimaryLgOffset: 6,
-  shadowPrimarySmOffset: 4,
-  shadowSecondaryOffset: 6,
-  shadowGhostOffset: 4,
-  shadowFeedbackOffset: 4,
-  shadowStreakOffset: 6,
   textPrimary: Color(0xfff3f4f6),
   textSecondary: Color(0xffd1d5db),
   textMuted: Color(0xff9ca3af),
   softGray: Color(0xff1f2937),
-  indigoSoft: Color(0xff312e81),
   greenSoft: Color(0xff052e16),
-  redSoft: Color(0xff450a0a),
-  orangeSoft: Color(0xff431407),
-  borderWidthDefault: 2,
-  spacePanelPadding: 28,
-  spacePanelGapLg: 24,
-  spacePanelGapMd: 18,
-  spacePanelGapSm: 12,
-  spaceControlGapMd: 10,
-  sizePanelMinHeightMd: 350,
-  fontSizeTextEyebrow: 10,
-  fontSizeTextBody: 14,
-  fontSizeTextMuted: 12,
-  fontSizeTextTitle: 22,
-  fontSizeTextDisplay: 36,
-  fontSizeFieldDisplay: 30,
-  fontSizeTactileSm: 14,
-  fontSizeTactileMd: 16,
-  fontSizeTactileLg: 18,
-  fontSizeTactileIcon: 0,
-  fontWeightTextBase: FontWeight.w700,
-  fontWeightTextBody: FontWeight.w600,
-  fontWeightTextStrong: FontWeight.w800,
-  fontWeightTextHeavy: FontWeight.w900,
-  lineHeightTextBody: 1.45,
-  lineHeightTextTitle: 1.1,
-  lineHeightTextDisplay: 1.05,
-  lineHeightFieldDisplay: 1.15,
-  lineHeightTactile: 1.1,
-  letterSpacingTextEyebrow: 1.6,
-  sizeIconMd: 18,
-  sizeIconLg: 22,
-  colorTransparent: Colors.transparent,
-  colorTextOnBrand: Colors.white,
+  ratingAgainBackground: Color(0xff450a0a),
+  ratingAgainText: Color(0xffff8a80),
+  ratingAgainBorder: Color(0xff7f1d1d),
+  ratingAgainHoverBackground: Color(0xff5f1414),
+  ratingHardBackground: Color(0xff431407),
+  ratingHardText: Color(0xffffb74d),
+  ratingHardBorder: Color(0xff7c2d12),
+  ratingHardHoverBackground: Color(0xff5a1d0a),
+  ratingGoodBackground: Color(0xff052e16),
+  ratingGoodText: Color(0xff81c784),
+  ratingGoodBorder: Color(0xff14532d),
+  ratingGoodHoverBackground: Color(0xff0b3d1f),
+  ratingEasyBackground: Color(0xff082f49),
+  ratingEasyText: Color(0xff64b5f6),
+  ratingEasyBorder: Color(0xff075985),
+  ratingEasyHoverBackground: Color(0xff0c4a6e),
+  radiusContainerLarge: radiusContainerLarge,
+  radius2xl: radius2xl,
+  radius3xl: radius3xl,
+  shadowPrimaryLgOffset: shadowPrimaryLgOffset,
+  shadowSecondaryOffset: shadowSecondaryOffset,
+  shadowGhostOffset: shadowGhostOffset,
+  shadowFeedbackOffset: shadowFeedbackOffset,
+  shadowStreakOffset: shadowStreakOffset,
+  borderWidthDefault: borderWidthDefault,
+  spacePanelPadding: spacePanelPadding,
+  spacePanelGapLg: spacePanelGapLg,
+  spacePanelGapMd: spacePanelGapMd,
+  spacePanelGapSm: spacePanelGapSm,
+  textSizeHeader: textSizeHeader,
+  textSizeLabelLarge: textSizeLabelLarge,
+  textSizeLabel: textSizeLabel,
+  textSizeLabelSmall: textSizeLabelSmall,
+  textSizeBodyLarge: textSizeBodyLarge,
+  fontWeightTextBase: fontWeightTextBase,
+  fontWeightTextBody: fontWeightTextBody,
+  fontWeightTextStrong: fontWeightTextStrong,
+  fontWeightTextHeavy: fontWeightTextHeavy,
+  lineHeightTextBody: lineHeightTextBody,
+  lineHeightTextTitle: lineHeightTextTitle,
+  lineHeightTextDisplay: lineHeightTextDisplay,
+  lineHeightFieldDisplay: lineHeightFieldDisplay,
+  lineHeightTactile: lineHeightTactile,
+  letterSpacingTextEyebrow: letterSpacingTextEyebrow,
+  sizeIconMd: sizeIconMd,
+  sizeIconLg: sizeIconLg,
+  colorTransparent: colorTransparent,
+  colorTextOnBrand: colorTextOnBrand,
 );

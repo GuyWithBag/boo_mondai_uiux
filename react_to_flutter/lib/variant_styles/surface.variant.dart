@@ -18,6 +18,13 @@ final surfaceStyle = VariantStyle.surfaceParts<AppTokens>(
           width: tokens.borderWidthDefault,
         ),
       ),
+      DecorationPart.boxShadow([
+        BoxShadow(
+          color: tokens.borderNeutralSubtle.withValues(alpha: 0.55),
+          offset: const Offset(0, 4),
+          blurRadius: 12,
+        ),
+      ]),
     }),
   },
   defaultVariants: const [SurfaceTone.surface],
@@ -25,7 +32,7 @@ final surfaceStyle = VariantStyle.surfaceParts<AppTokens>(
     SurfaceTone.surface: (_) => const {},
     SurfaceTone.selected: (tokens) => {
       SurfaceStylePart.decoration({
-        DecorationPart.color(tokens.indigoSoft),
+        DecorationPart.color(tokens.primarySoft),
         DecorationPart.border(
           Border.all(
             color: tokens.primaryLight,
@@ -64,8 +71,21 @@ final surfaceStyle = VariantStyle.surfaceParts<AppTokens>(
     },
     SurfaceTone.dark: (tokens) => {
       SurfaceStylePart.decoration({
-        DecorationPart.color(tokens.indigoSoft),
+        DecorationPart.color(tokens.primaryDark),
         DecorationPart.radius(tokens.radiusContainerLarge),
+        DecorationPart.border(
+          Border.all(
+            color: tokens.primaryDark,
+            width: tokens.borderWidthDefault,
+          ),
+        ),
+        DecorationPart.boxShadow([
+          BoxShadow(
+            color: tokens.primaryDark.withValues(alpha: 0.35),
+            offset: const Offset(0, 8),
+            blurRadius: 20,
+          ),
+        ]),
       }),
     },
   },

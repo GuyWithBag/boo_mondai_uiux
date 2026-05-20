@@ -28,7 +28,11 @@ class TextFieldCard extends StatelessWidget {
         children: [
           Text(
             title.toUpperCase(),
-            style: appTextStyle.resolve(tokens, [AppTextRole.eyebrow]),
+            style: appTextStyle.resolve(tokens, [
+              TextSize.labelSmall,
+              TextWeight.heavy,
+              TextTone.muted,
+            ]),
           ),
           SizedBox(height: tokens.spacePanelGapLg),
           Expanded(
@@ -38,7 +42,7 @@ class TextFieldCard extends StatelessWidget {
               textAlignVertical: TextAlignVertical.top,
               style: TextStyle(
                 color: tokens.textPrimary,
-                fontSize: tokens.fontSizeFieldDisplay,
+                fontSize: tokens.textSizeBodyLarge,
                 fontWeight: tokens.fontWeightTextStrong,
                 height: tokens.lineHeightFieldDisplay,
               ),
@@ -53,17 +57,12 @@ class TextFieldCard extends StatelessWidget {
           ),
           Row(
             children: [
-              TactileButton(
+              TactileButton.iconOnly(
                 onPressed: () {},
                 icon: Icons.image_outlined,
-                size: TactileSize.icon,
               ),
               SizedBox(width: tokens.spacePanelGapSm),
-              TactileButton(
-                onPressed: () {},
-                icon: Icons.mic,
-                size: TactileSize.icon,
-              ),
+              TactileButton.iconOnly(onPressed: () {}, icon: Icons.mic),
             ],
           ),
         ],

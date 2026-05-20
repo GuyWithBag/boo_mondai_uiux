@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:react_to_flutter/theme/app_tokens.dart';
 import 'package:theme_variants/theme_variants.dart';
 
@@ -6,7 +7,21 @@ enum TactileSize { sm, md, lg, icon }
 
 enum TactileState { idle, hovered, selected, disabled, pressed }
 
-enum TactileTone { filled, ghost, success, error, streak, dashed, text }
+enum TactileTone {
+  filled,
+  ghost,
+  success,
+  error,
+  streak,
+  dashed,
+  text,
+  again,
+  hard,
+  good,
+  easy,
+}
+
+enum TactileAlign { fit, start, center }
 
 final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
   base: (tokens) => {
@@ -28,7 +43,7 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
     }),
     SurfaceStylePart.text({
       TextStylePart.color(tokens.textSecondary),
-      TextStylePart.fontSize(tokens.fontSizeTactileMd),
+      TextStylePart.fontSize(tokens.textSizeLabel.sp),
       TextStylePart.fontWeight(tokens.fontWeightTextStrong),
       TextStylePart.height(tokens.lineHeightTactile),
     }),
@@ -37,7 +52,12 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
       IconThemePart.size(tokens.sizeIconMd),
     }),
   },
-  defaultVariants: const [TactileTone.ghost, TactileSize.md, TactileState.idle],
+  defaultVariants: const [
+    TactileTone.ghost,
+    TactileSize.md,
+    TactileState.idle,
+    TactileAlign.fit,
+  ],
   variants: {
     TactileTone.filled: (tokens) => {
       SurfaceStylePart.decoration({
@@ -76,7 +96,7 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
     },
     TactileTone.success: (tokens) => {
       SurfaceStylePart.decoration({
-        DecorationPart.color(tokens.greenSoft),
+        DecorationPart.color(tokens.actionSuccess.withValues(alpha: 0.12)),
         DecorationPart.border(
           Border.all(
             color: tokens.actionSuccess,
@@ -85,7 +105,7 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
         ),
         DecorationPart.boxShadow([
           BoxShadow(
-            color: tokens.actionSuccessLight,
+            color: tokens.actionSuccess.withValues(alpha: 0.32),
             offset: Offset(0, tokens.shadowFeedbackOffset),
           ),
         ]),
@@ -95,16 +115,16 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
     },
     TactileTone.error: (tokens) => {
       SurfaceStylePart.decoration({
-        DecorationPart.color(tokens.redSoft),
+        DecorationPart.color(tokens.actionError.withValues(alpha: 0.12)),
         DecorationPart.border(
           Border.all(
-            color: tokens.actionErrorLight,
+            color: tokens.actionError,
             width: tokens.borderWidthDefault,
           ),
         ),
         DecorationPart.boxShadow([
           BoxShadow(
-            color: tokens.actionErrorLight,
+            color: tokens.actionError.withValues(alpha: 0.32),
             offset: Offset(0, tokens.shadowFeedbackOffset),
           ),
         ]),
@@ -153,23 +173,98 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
       SurfaceStylePart.text({TextStylePart.color(tokens.textSecondary)}),
       SurfaceStylePart.icon({IconThemePart.color(tokens.textSecondary)}),
     },
+    TactileTone.again: (tokens) => {
+      SurfaceStylePart.decoration({
+        DecorationPart.color(tokens.ratingAgainBackground),
+        DecorationPart.border(
+          Border.all(
+            color: tokens.ratingAgainBorder,
+            width: tokens.borderWidthDefault,
+          ),
+        ),
+        DecorationPart.boxShadow([
+          BoxShadow(
+            color: tokens.ratingAgainBorder,
+            offset: Offset(0, tokens.shadowFeedbackOffset),
+          ),
+        ]),
+      }),
+      SurfaceStylePart.text({TextStylePart.color(tokens.ratingAgainText)}),
+      SurfaceStylePart.icon({IconThemePart.color(tokens.ratingAgainText)}),
+    },
+    TactileTone.hard: (tokens) => {
+      SurfaceStylePart.decoration({
+        DecorationPart.color(tokens.ratingHardBackground),
+        DecorationPart.border(
+          Border.all(
+            color: tokens.ratingHardBorder,
+            width: tokens.borderWidthDefault,
+          ),
+        ),
+        DecorationPart.boxShadow([
+          BoxShadow(
+            color: tokens.ratingHardBorder,
+            offset: Offset(0, tokens.shadowFeedbackOffset),
+          ),
+        ]),
+      }),
+      SurfaceStylePart.text({TextStylePart.color(tokens.ratingHardText)}),
+      SurfaceStylePart.icon({IconThemePart.color(tokens.ratingHardText)}),
+    },
+    TactileTone.good: (tokens) => {
+      SurfaceStylePart.decoration({
+        DecorationPart.color(tokens.ratingGoodBackground),
+        DecorationPart.border(
+          Border.all(
+            color: tokens.ratingGoodBorder,
+            width: tokens.borderWidthDefault,
+          ),
+        ),
+        DecorationPart.boxShadow([
+          BoxShadow(
+            color: tokens.ratingGoodBorder,
+            offset: Offset(0, tokens.shadowFeedbackOffset),
+          ),
+        ]),
+      }),
+      SurfaceStylePart.text({TextStylePart.color(tokens.ratingGoodText)}),
+      SurfaceStylePart.icon({IconThemePart.color(tokens.ratingGoodText)}),
+    },
+    TactileTone.easy: (tokens) => {
+      SurfaceStylePart.decoration({
+        DecorationPart.color(tokens.ratingEasyBackground),
+        DecorationPart.border(
+          Border.all(
+            color: tokens.ratingEasyBorder,
+            width: tokens.borderWidthDefault,
+          ),
+        ),
+        DecorationPart.boxShadow([
+          BoxShadow(
+            color: tokens.ratingEasyBorder,
+            offset: Offset(0, tokens.shadowFeedbackOffset),
+          ),
+        ]),
+      }),
+      SurfaceStylePart.text({TextStylePart.color(tokens.ratingEasyText)}),
+      SurfaceStylePart.icon({IconThemePart.color(tokens.ratingEasyText)}),
+    },
     TactileSize.sm: (tokens) => {
-      SurfaceStylePart.text({TextStylePart.fontSize(tokens.fontSizeTactileSm)}),
+      SurfaceStylePart.text({TextStylePart.fontSize(tokens.textSizeLabel)}),
       SurfaceStylePart.icon({IconThemePart.size(tokens.sizeIconMd)}),
     },
     TactileSize.md: (tokens) => {
-      SurfaceStylePart.text({TextStylePart.fontSize(tokens.fontSizeTactileMd)}),
+      SurfaceStylePart.text({TextStylePart.fontSize(tokens.textSizeLabel)}),
       SurfaceStylePart.icon({IconThemePart.size(tokens.sizeIconMd)}),
     },
     TactileSize.lg: (tokens) => {
-      SurfaceStylePart.text({TextStylePart.fontSize(tokens.fontSizeTactileLg)}),
-      SurfaceStylePart.icon({IconThemePart.size(tokens.sizeIconMd)}),
+      SurfaceStylePart.text({TextStylePart.fontSize(tokens.textSizeLabel)}),
+      SurfaceStylePart.icon({IconThemePart.size(tokens.sizeIconLg)}),
     },
     TactileSize.icon: (tokens) => {
-      SurfaceStylePart.text({
-        TextStylePart.fontSize(tokens.fontSizeTactileIcon),
-      }),
       SurfaceStylePart.icon({IconThemePart.size(tokens.sizeIconLg)}),
+      SurfaceStylePart.height(48),
+      SurfaceStylePart.width(48),
     },
     TactileState.idle: (_) => const <StylePart<SurfaceStyle>>{},
     TactileState.hovered: (_) => const <StylePart<SurfaceStyle>>{},
@@ -178,7 +273,7 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
     },
     TactileState.selected: (tokens) => {
       SurfaceStylePart.decoration({
-        DecorationPart.color(tokens.indigoSoft),
+        DecorationPart.color(tokens.primarySoft),
         DecorationPart.border(
           Border.all(
             color: tokens.primaryLight,
@@ -198,12 +293,15 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
     TactileState.disabled: (_) => {
       SurfaceStylePart.decoration({DecorationPart.boxShadow(const [])}),
     },
+    TactileAlign.start: (_) => {SurfaceStylePart.alignment(.centerStart)},
+    TactileAlign.center: (_) => {SurfaceStylePart.alignment(.center)},
+    TactileAlign.fit: (_) => {},
   },
   compoundVariants: [
     CompoundVariantParts<AppTokens, SurfaceStyle>(
       when: const {TactileTone.dashed, TactileState.hovered},
       build: (tokens) => {
-        SurfaceStylePart.decoration({DecorationPart.color(tokens.indigoSoft)}),
+        SurfaceStylePart.decoration({DecorationPart.color(tokens.primarySoft)}),
         SurfaceStylePart.text({TextStylePart.color(tokens.primary)}),
         SurfaceStylePart.icon({IconThemePart.color(tokens.primary)}),
       },
@@ -212,7 +310,7 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
       when: const {TactileTone.ghost, TactileState.selected},
       build: (tokens) => {
         SurfaceStylePart.decoration({
-          DecorationPart.color(tokens.indigoSoft),
+          DecorationPart.color(tokens.primarySoft),
           DecorationPart.border(
             Border.all(
               color: tokens.primaryLight,
@@ -230,23 +328,55 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
         SurfaceStylePart.icon({IconThemePart.color(tokens.primary)}),
       },
     ),
+    CompoundVariantParts<AppTokens, SurfaceStyle>(
+      when: const {TactileTone.again, TactileState.hovered},
+      build: (tokens) => {
+        SurfaceStylePart.decoration({
+          DecorationPart.color(tokens.ratingAgainHoverBackground),
+        }),
+      },
+    ),
+    CompoundVariantParts<AppTokens, SurfaceStyle>(
+      when: const {TactileTone.hard, TactileState.hovered},
+      build: (tokens) => {
+        SurfaceStylePart.decoration({
+          DecorationPart.color(tokens.ratingHardHoverBackground),
+        }),
+      },
+    ),
+    CompoundVariantParts<AppTokens, SurfaceStyle>(
+      when: const {TactileTone.good, TactileState.hovered},
+      build: (tokens) => {
+        SurfaceStylePart.decoration({
+          DecorationPart.color(tokens.ratingGoodHoverBackground),
+        }),
+      },
+    ),
+    CompoundVariantParts<AppTokens, SurfaceStyle>(
+      when: const {TactileTone.easy, TactileState.hovered},
+      build: (tokens) => {
+        SurfaceStylePart.decoration({
+          DecorationPart.color(tokens.ratingEasyHoverBackground),
+        }),
+      },
+    ),
   ],
 );
 
-final tactileButtonDecoration = _TactileButtonDecorationStyle();
-final tactileButtonText = _TactileButtonTextStyle();
+// final tactileButtonDecoration = _TactileButtonDecorationStyle();
+// final tactileButtonText = _TactileButtonTextStyle();
 
-class _TactileButtonDecorationStyle {
-  BoxDecoration resolve(
-    AppTokens tokens, [
-    Iterable<Object> variants = const [],
-  ]) {
-    return tactileButtonStyle.resolve(tokens, variants).decoration;
-  }
-}
+// class _TactileButtonDecorationStyle {
+//   BoxDecoration resolve(
+//     AppTokens tokens, [
+//     Iterable<Object> variants = const [],
+//   ]) {
+//     return tactileButtonStyle.resolve(tokens, variants).decoration;
+//   }
+// }
 
-class _TactileButtonTextStyle {
-  TextStyle resolve(AppTokens tokens, [Iterable<Object> variants = const []]) {
-    return tactileButtonStyle.resolve(tokens, variants).textStyle;
-  }
-}
+// class _TactileButtonTextStyle {
+//   TextStyle resolve(AppTokens tokens, [Iterable<Object> variants = const []]) {
+//     return tactileButtonStyle.resolve(tokens, variants).textStyle;
+//   }
+// }

@@ -14,7 +14,7 @@ class TactileButton extends HookWidget {
     this.size = TactileSize.md,
     this.selected = false,
     super.key,
-    this.mainAxisAlignment = MainAxisAlignment.center,
+    this.alignment = TactileAlign.center,
   });
 
   final Widget? child;
@@ -23,7 +23,22 @@ class TactileButton extends HookWidget {
   final TactileTone tone;
   final TactileSize size;
   final bool selected;
-  final MainAxisAlignment mainAxisAlignment;
+  final TactileAlign alignment;
+
+  static TactileButton iconOnly({
+    VoidCallback? onPressed,
+    IconData? icon,
+    TactileTone tone = TactileTone.ghost,
+    bool selected = false,
+  }) {
+    return TactileButton(
+      onPressed: onPressed,
+      icon: icon,
+      tone: tone,
+      size: TactileSize.icon,
+      selected: selected,
+    );
+  }
 
   TactileState getState() {
     if (onPressed == null) {
@@ -33,6 +48,15 @@ class TactileButton extends HookWidget {
     } else {
       return TactileState.idle;
     }
+  }
+
+  TactileState getHoverState() {
+    final currentState = getState();
+    if (currentState == TactileState.disabled ||
+        currentState == TactileState.selected) {
+      return currentState;
+    }
+    return TactileState.hovered;
   }
 
   @override
@@ -47,6 +71,7 @@ class TactileButton extends HookWidget {
       tone,
       size,
       state.value,
+      alignment,
     ]);
 
     final padding = switch (size) {
@@ -85,7 +110,6 @@ class TactileButton extends HookWidget {
       padding: padding,
       opacity: state.value == TactileState.disabled ? 0.5 : 1,
       contentStyle: resolvedStyle.contentStyle,
-      alignment: Alignment.center,
     );
 
     final content = Surface(
@@ -94,13 +118,12 @@ class TactileButton extends HookWidget {
       curve: Curves.easeOutCubic,
       child: Row(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: mainAxisAlignment,
         children: [
           if (icon != null) ...[
             Icon(icon),
             if (child != null) const SizedBox(width: 10),
           ],
-          Flexible(child: child ?? SizedBox.shrink()),
+          if (child != null) Flexible(child: child!),
         ],
       ),
     );
@@ -126,10 +149,10 @@ class TactileButton extends HookWidget {
           : SystemMouseCursors.click,
       onEnter: state.value == TactileState.disabled
           ? null
-          : (_) => state.value = TactileState.hovered,
+          : (_) => state.value = getHoverState(),
       onExit: state.value == TactileState.disabled
           ? null
-          : (_) => state.value = TactileState.idle,
+          : (_) => state.value = getState(),
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTapDown: state.value == TactileState.disabled
@@ -137,12 +160,12 @@ class TactileButton extends HookWidget {
             : (_) => state.value = TactileState.pressed,
         onTapCancel: state.value == TactileState.disabled
             ? null
-            : () => state.value = TactileState.idle,
+            : () => state.value = getState(),
         onTapUp: state.value == TactileState.disabled
             ? null
             : (_) {
                 onPressed?.call();
-                state.value = TactileState.hovered;
+                state.value = getHoverState();
               },
         child: paintedContent,
       ),

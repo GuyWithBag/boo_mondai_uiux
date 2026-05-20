@@ -46,7 +46,7 @@ class BooMondaiApp extends HookWidget {
     return ThemeVariantsProvider<AppTokens>(
       controller: controller,
       child: ScreenUtilInit(
-        designSize: const Size(1440, 900),
+        designSize: const Size(1920, 1080),
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (_, _) => AnimatedBuilder(

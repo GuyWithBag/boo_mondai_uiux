@@ -35,7 +35,11 @@ class DesignSection extends StatelessWidget {
             ),
             child: Text(
               title.toUpperCase(),
-              style: appTextStyle.resolve(tokens, [AppTextRole.eyebrow]),
+              style: appTextStyle.resolve(tokens, [
+                TextSize.labelSmall,
+                TextWeight.heavy,
+                TextTone.muted,
+              ]),
             ),
           ),
           const SizedBox(height: 24),

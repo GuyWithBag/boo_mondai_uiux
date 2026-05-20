@@ -6,7 +6,6 @@ import 'package:theme_variants/theme_variants.dart';
 
 import '../theme/app_tokens.dart';
 import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
-import '../widgets/color_bubble.dart';
 import '../widgets/tactile_button.dart';
 
 class DesignSystemPage extends HookWidget {
@@ -35,8 +34,6 @@ class DesignSystemPage extends HookWidget {
                       _ColorSection(tokens: tokens),
                       const _TypographySection(),
                       const _ButtonLabSection(),
-                      const _ProgressPathwaySection(),
-                      const _HeroTransitionSection(),
                       const _RoadmapSection(),
                     ],
                   ),
@@ -47,11 +44,9 @@ class DesignSystemPage extends HookWidget {
           Positioned(
             top: 32,
             right: 32,
-            child: TactileButton(
+            child: TactileButton.iconOnly(
               icon: Icons.close,
-              size: TactileSize.icon,
               onPressed: () => context.go('/'),
-              child: const SizedBox.shrink(),
             ),
           ),
         ],
@@ -209,25 +204,61 @@ class _ColorSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return DesignSection(
       title: '02. Color Palette',
-      child: _ResponsiveGrid(
-        minItemWidth: 170,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ColorBubble(color: tokens.primary, hex: '#6366F1', label: 'Primary'),
-          ColorBubble(color: tokens.streak, hex: '#F97316', label: 'Streak'),
-          ColorBubble(
-            color: tokens.backgroundPage,
-            hex: '#F8F9FA',
-            label: 'Soft Background',
+          _TokenSwatchGroup(
+            title: 'Brand',
+            swatches: [
+              _TokenSwatch('primary', tokens.primary),
+              _TokenSwatch('primaryDark', tokens.primaryDark),
+              _TokenSwatch('primaryLight', tokens.primaryLight),
+              _TokenSwatch('primarySoft', tokens.primarySoft),
+              _TokenSwatch('streak', tokens.streak),
+              _TokenSwatch('streakDark', tokens.streakDark),
+            ],
           ),
-          ColorBubble(
-            color: tokens.actionSuccess,
-            hex: '#22C55E',
-            label: 'Mastery/Success',
+          const SizedBox(height: 28),
+          _TokenSwatchGroup(
+            title: 'Surface & Text',
+            swatches: [
+              _TokenSwatch('backgroundPage', tokens.backgroundPage),
+              _TokenSwatch('backgroundSurface', tokens.backgroundSurface),
+              _TokenSwatch('softGray', tokens.softGray),
+              _TokenSwatch('borderNeutralSubtle', tokens.borderNeutralSubtle),
+              _TokenSwatch('textPrimary', tokens.textPrimary),
+              _TokenSwatch('textSecondary', tokens.textSecondary),
+              _TokenSwatch('textMuted', tokens.textMuted),
+            ],
           ),
-          ColorBubble(
-            color: tokens.actionError,
-            hex: '#EF4444',
-            label: 'Review/Error',
+          const SizedBox(height: 28),
+          _TokenSwatchGroup(
+            title: 'Actions',
+            swatches: [
+              _TokenSwatch('actionSuccess', tokens.actionSuccess),
+              _TokenSwatch('actionError', tokens.actionError),
+            ],
+          ),
+          const SizedBox(height: 28),
+          _TokenSwatchGroup(
+            title: 'Ratings',
+            swatches: [
+              _TokenSwatch(
+                'ratingAgainBackground',
+                tokens.ratingAgainBackground,
+              ),
+              _TokenSwatch('ratingAgainText', tokens.ratingAgainText),
+              _TokenSwatch('ratingAgainBorder', tokens.ratingAgainBorder),
+              _TokenSwatch('ratingHardBackground', tokens.ratingHardBackground),
+              _TokenSwatch('ratingHardText', tokens.ratingHardText),
+              _TokenSwatch('ratingHardBorder', tokens.ratingHardBorder),
+              _TokenSwatch('ratingGoodBackground', tokens.ratingGoodBackground),
+              _TokenSwatch('ratingGoodText', tokens.ratingGoodText),
+              _TokenSwatch('ratingGoodBorder', tokens.ratingGoodBorder),
+              _TokenSwatch('ratingEasyBackground', tokens.ratingEasyBackground),
+              _TokenSwatch('ratingEasyText', tokens.ratingEasyText),
+              _TokenSwatch('ratingEasyBorder', tokens.ratingEasyBorder),
+            ],
           ),
         ],
       ),
@@ -250,28 +281,56 @@ class _TypographySection extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _TypeSpec(
-              label: 'Display 01 / Black',
+              label: 'TextSize.header + TextWeight.heavy + TextTone.primary',
               text: 'Learning Made Tactile',
-              style: appTextStyle
-                  .resolve(tokens, [AppTextRole.display])
-                  .copyWith(fontSize: 54),
+              style: appTextStyle.resolve(tokens, [
+                TextSize.header,
+                TextWeight.heavy,
+                TextTone.primary,
+              ]),
             ),
             const SizedBox(height: 30),
             _TypeSpec(
-              label: 'Header 02 / ExtraBold',
+              label:
+                  'TextSize.labelLarge + TextWeight.heavy + TextTone.primary',
               text: 'Ready for your review?',
-              style: appTextStyle
-                  .resolve(tokens, [AppTextRole.title])
-                  .copyWith(fontSize: 30),
+              style: appTextStyle.resolve(tokens, [
+                TextSize.labelLarge,
+                TextWeight.heavy,
+                TextTone.primary,
+              ]),
             ),
             const SizedBox(height: 30),
             _TypeSpec(
-              label: 'Body / Medium',
+              label: 'TextSize.label + TextWeight.body + TextTone.secondary',
               text:
-                  'The quick brown flashcard. We prioritize readability with high line-height and generous spacing.',
-              style: appTextStyle
-                  .resolve(tokens, [AppTextRole.body])
-                  .copyWith(fontSize: 20),
+                  'The quick brown flashcard uses label text for compact supporting copy.',
+              style: appTextStyle.resolve(tokens, [
+                TextSize.label,
+                TextWeight.body,
+                TextTone.secondary,
+              ]),
+            ),
+            const SizedBox(height: 30),
+            _TypeSpec(
+              label: 'TextSize.labelSmall + TextWeight.heavy + TextTone.muted',
+              text: 'EYEBROW LABEL',
+              style: appTextStyle.resolve(tokens, [
+                TextSize.labelSmall,
+                TextWeight.heavy,
+                TextTone.muted,
+              ]),
+            ),
+            const SizedBox(height: 30),
+            _TypeSpec(
+              label:
+                  'TextSize.bodyLarge + TextWeight.strong + TextTone.primary',
+              text: '図書館 (Library)',
+              style: appTextStyle.resolve(tokens, [
+                TextSize.bodyLarge,
+                TextWeight.strong,
+                TextTone.primary,
+              ]),
             ),
           ],
         ),
@@ -288,149 +347,150 @@ class _ButtonLabSection extends StatelessWidget {
     return DesignSection(
       title: '04. The Button Lab',
       child: _ResponsiveGrid(
-        minItemWidth: 360,
-        children: const [
+        minItemWidth: 320,
+        children: [
           _ButtonGroup(
-            title: 'Action Variants',
+            title: 'Tone',
             children: [
               TactileButton(
                 tone: TactileTone.filled,
-                size: TactileSize.lg,
-                child: Text('Primary Action'),
+                icon: Icons.play_arrow,
+                onPressed: () {},
+                child: Text('Filled'),
               ),
-              TactileButton(size: TactileSize.lg, child: Text('Secondary')),
               TactileButton(
                 tone: TactileTone.ghost,
-                child: Text('Ghost Variant'),
+                icon: Icons.layers_outlined,
+                onPressed: () {},
+                child: Text('Ghost'),
               ),
-              TactileButton(tone: TactileTone.text, child: Text('Text Link')),
+              TactileButton(
+                tone: TactileTone.text,
+                icon: Icons.link,
+                onPressed: () {},
+                child: Text('Text'),
+              ),
+              TactileButton(
+                tone: TactileTone.dashed,
+                icon: Icons.add,
+                onPressed: () {},
+                child: Text('Dashed'),
+              ),
+              TactileButton(
+                tone: TactileTone.streak,
+                icon: Icons.local_fire_department,
+                onPressed: () {},
+                child: Text('Streak'),
+              ),
             ],
           ),
           _ButtonGroup(
-            title: 'Memory Rating',
+            title: 'Rating',
+            children: [
+              TactileButton(
+                tone: TactileTone.again,
+                icon: Icons.replay,
+                onPressed: () {},
+                child: Text('Again'),
+              ),
+              TactileButton(
+                tone: TactileTone.hard,
+                icon: Icons.priority_high,
+                onPressed: () {},
+                child: Text('Hard'),
+              ),
+              TactileButton(
+                tone: TactileTone.good,
+                icon: Icons.check,
+                onPressed: () {},
+                child: Text('Good'),
+              ),
+              TactileButton(
+                tone: TactileTone.easy,
+                icon: Icons.bolt,
+                onPressed: () {},
+                child: Text('Easy'),
+              ),
+            ],
+          ),
+          _ButtonGroup(
+            title: 'State',
+            children: [
+              TactileButton(
+                tone: TactileTone.success,
+                icon: Icons.check_circle,
+                onPressed: () {},
+                child: Text('Success'),
+              ),
+              TactileButton(
+                tone: TactileTone.error,
+                icon: Icons.cancel,
+                onPressed: () {},
+                child: Text('Error'),
+              ),
+              TactileButton(
+                selected: true,
+                icon: Icons.star,
+                onPressed: () {},
+                child: Text('Selected'),
+              ),
+              TactileButton(icon: Icons.block, child: Text('Disabled')),
+            ],
+          ),
+          _ButtonGroup(
+            title: 'Size',
+            children: [
+              TactileButton(
+                size: TactileSize.sm,
+                icon: Icons.text_fields,
+                onPressed: () {},
+                child: Text('Small'),
+              ),
+              TactileButton(
+                size: TactileSize.md,
+                icon: Icons.text_fields,
+                onPressed: () {},
+                child: Text('Medium'),
+              ),
+              TactileButton(
+                size: TactileSize.lg,
+                icon: Icons.text_fields,
+                onPressed: () {},
+                child: Text('Large'),
+              ),
+              TactileButton.iconOnly(icon: Icons.settings, onPressed: () {}),
+            ],
+          ),
+          _ButtonGroup(
+            title: 'Alignment',
             children: [
               SizedBox(
                 width: double.infinity,
                 child: TactileButton(
-                  tone: TactileTone.error,
-                  child: _RatingText(label: 'Again', interval: '1M'),
+                  alignment: TactileAlign.start,
+                  icon: Icons.format_align_left,
+                  onPressed: () {},
+                  child: Text('Start aligned'),
                 ),
               ),
               SizedBox(
                 width: double.infinity,
                 child: TactileButton(
-                  tone: TactileTone.success,
-                  child: _RatingText(label: 'Good', interval: '10M'),
+                  alignment: TactileAlign.center,
+                  icon: Icons.format_align_center,
+                  onPressed: () {},
+                  child: Text('Center aligned'),
                 ),
+              ),
+              TactileButton(
+                alignment: TactileAlign.fit,
+                icon: Icons.fit_screen,
+                onPressed: () {},
+                child: Text('Fit content'),
               ),
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ProgressPathwaySection extends StatelessWidget {
-  const _ProgressPathwaySection();
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.themeTokens<AppTokens>();
-
-    return DesignSection(
-      title: '05. Progress Pathways',
-      child: Surface(
-        style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
-        child: Column(
-          children: [
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 720),
-              child: Text(
-                'Abstract percentage bars are difficult to contextualize. By transforming progress into a physical pathway, learning becomes a tangible journey.',
-                textAlign: TextAlign.center,
-                style: appTextStyle.resolve(tokens, [AppTextRole.body]),
-              ),
-            ),
-            const SizedBox(height: 36),
-            SizedBox(
-              height: 116,
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  Container(
-                    height: 12,
-                    decoration: BoxDecoration(
-                      color: tokens.softGray,
-                      borderRadius: BorderRadius.circular(99),
-                    ),
-                  ),
-                  FractionallySizedBox(
-                    widthFactor: 0.5,
-                    alignment: Alignment.centerLeft,
-                    child: Container(
-                      height: 12,
-                      decoration: BoxDecoration(
-                        color: tokens.primary,
-                        borderRadius: BorderRadius.circular(99),
-                      ),
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      _PathNode(icon: Icons.check, active: true),
-                      _PathNode(icon: Icons.check, active: true),
-                      _PathNode(
-                        icon: Icons.local_fire_department,
-                        current: true,
-                      ),
-                      _PathNode(icon: Icons.lock, active: false),
-                      _PathNode(icon: Icons.lock, active: false),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _HeroTransitionSection extends StatelessWidget {
-  const _HeroTransitionSection();
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.themeTokens<AppTokens>();
-
-    return DesignSection(
-      title: '06. Spatial Navigation',
-      child: Surface(
-        style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
-        child: Column(
-          children: [
-            ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 720),
-              child: Text(
-                'Hero animations anchor spatial awareness by physically morphing the clicked element into the next screen header.',
-                textAlign: TextAlign.center,
-                style: appTextStyle.resolve(tokens, [AppTextRole.body]),
-              ),
-            ),
-            const SizedBox(height: 36),
-            _ResponsiveGrid(
-              minItemWidth: 280,
-              children: const [
-                _TransitionStateOne(),
-                Center(child: Icon(Icons.arrow_forward, size: 36)),
-                _TransitionStateTwo(),
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }
@@ -443,13 +503,25 @@ class _RoadmapSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final tokens = context.themeTokens<AppTokens>();
     final items = [
-      'Haptic Engine: Every 3D button should trigger a native vibration pattern.',
-      'Sensory Safety: Add a Soft Mode toggle that reduces contrast and motion.',
-      'Dyslexia Support: Include a toggle for OpenDyslexic or a similar typeface.',
+      (
+        Icons.vibration,
+        'Haptic Engine',
+        'Every tactile button should trigger a native vibration pattern.',
+      ),
+      (
+        Icons.contrast,
+        'Sensory Safety',
+        'Add a Soft Mode toggle that reduces contrast and motion.',
+      ),
+      (
+        Icons.text_fields,
+        'Dyslexia Support',
+        'Include a toggle for OpenDyslexic or a similar typeface.',
+      ),
     ];
 
     return DesignSection(
-      title: '07. Accessibility & Flutter Roadmap',
+      title: '06. Accessibility & Flutter Roadmap',
       child: Surface(
         style: surfaceStyle.resolve(tokens, const [SurfaceTone.dark]),
         child: Column(
@@ -466,15 +538,34 @@ class _RoadmapSection extends StatelessWidget {
             const SizedBox(height: 20),
             for (final item in items)
               Padding(
-                padding: const EdgeInsets.only(bottom: 14),
-                child: Text(
-                  item,
-                  style: TextStyle(
-                    color: tokens.primaryLight,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    height: 1.4,
-                  ),
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Icon(item.$1, color: tokens.colorTextOnBrand, size: 22),
+                    const SizedBox(width: 14),
+                    Expanded(
+                      child: Text.rich(
+                        TextSpan(
+                          text: '${item.$2}: ',
+                          style: const TextStyle(fontWeight: FontWeight.w900),
+                          children: [
+                            TextSpan(
+                              text: item.$3,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        style: TextStyle(
+                          color: tokens.colorTextOnBrand,
+                          fontSize: 15,
+                          height: 1.4,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
           ],
@@ -521,11 +612,22 @@ class _InfoCard extends StatelessWidget {
           Text(
             title,
             style: appTextStyle
-                .resolve(tokens, [AppTextRole.title])
+                .resolve(tokens, [
+                  TextSize.labelLarge,
+                  TextWeight.heavy,
+                  TextTone.primary,
+                ])
                 .copyWith(fontSize: 20),
           ),
           const SizedBox(height: 10),
-          Text(body, style: appTextStyle.resolve(tokens, [AppTextRole.body])),
+          Text(
+            body,
+            style: appTextStyle.resolve(tokens, [
+              TextSize.label,
+              TextWeight.body,
+              TextTone.secondary,
+            ]),
+          ),
         ],
       ),
     );
@@ -562,6 +664,111 @@ class _ResponsiveGrid extends StatelessWidget {
   }
 }
 
+class _TokenSwatch {
+  const _TokenSwatch(this.name, this.color);
+
+  final String name;
+  final Color color;
+}
+
+class _TokenSwatchGroup extends StatelessWidget {
+  const _TokenSwatchGroup({required this.title, required this.swatches});
+
+  final String title;
+  final List<_TokenSwatch> swatches;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.themeTokens<AppTokens>();
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title.toUpperCase(),
+          style: appTextStyle.resolve(tokens, [
+            TextSize.labelSmall,
+            TextWeight.heavy,
+            TextTone.muted,
+          ]),
+        ),
+        const SizedBox(height: 14),
+        _ResponsiveGrid(
+          minItemWidth: 170,
+          children: [
+            for (final swatch in swatches) _TokenSwatchCard(swatch: swatch),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _TokenSwatchCard extends StatelessWidget {
+  const _TokenSwatchCard({required this.swatch});
+
+  final _TokenSwatch swatch;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.themeTokens<AppTokens>();
+    final hex =
+        '#${swatch.color.toARGB32().toRadixString(16).padLeft(8, '0').substring(2).toUpperCase()}';
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          height: 96,
+          alignment: Alignment.bottomLeft,
+          padding: const EdgeInsets.all(12),
+          decoration: BoxDecoration(
+            color: swatch.color,
+            borderRadius: BorderRadius.circular(tokens.radius3xl),
+            border: Border.all(
+              color: tokens.borderNeutralSubtle,
+              width: tokens.borderWidthDefault,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: tokens.borderNeutralSubtle.withValues(alpha: 0.55),
+                offset: const Offset(0, 3),
+                blurRadius: 10,
+              ),
+            ],
+          ),
+          child: Text(
+            hex,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 10,
+              fontWeight: FontWeight.w900,
+            ),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Text(
+          swatch.name,
+          style: appTextStyle.resolve(tokens, [
+            TextSize.label,
+            TextWeight.strong,
+            TextTone.primary,
+          ]),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          hex,
+          style: appTextStyle.resolve(tokens, [
+            TextSize.labelSmall,
+            TextWeight.body,
+            TextTone.muted,
+          ]),
+        ),
+      ],
+    );
+  }
+}
+
 class _TypeSpec extends StatelessWidget {
   const _TypeSpec({
     required this.label,
@@ -581,7 +788,11 @@ class _TypeSpec extends StatelessWidget {
       children: [
         Text(
           label.toUpperCase(),
-          style: appTextStyle.resolve(tokens, [AppTextRole.eyebrow]),
+          style: appTextStyle.resolve(tokens, [
+            TextSize.labelSmall,
+            TextWeight.heavy,
+            TextTone.muted,
+          ]),
         ),
         const SizedBox(height: 8),
         Text(text, style: style),
@@ -604,152 +815,15 @@ class _ButtonGroup extends StatelessWidget {
       children: [
         Text(
           title.toUpperCase(),
-          style: appTextStyle.resolve(tokens, [AppTextRole.eyebrow]),
+          style: appTextStyle.resolve(tokens, [
+            TextSize.labelSmall,
+            TextWeight.heavy,
+            TextTone.muted,
+          ]),
         ),
         const SizedBox(height: 18),
         Wrap(spacing: 14, runSpacing: 14, children: children),
       ],
-    );
-  }
-}
-
-class _RatingText extends StatelessWidget {
-  const _RatingText({required this.label, required this.interval});
-
-  final String label;
-  final String interval;
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Text(
-          label.toUpperCase(),
-          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w900),
-        ),
-        Text(
-          interval,
-          style: const TextStyle(fontSize: 10, fontWeight: FontWeight.w800),
-        ),
-      ],
-    );
-  }
-}
-
-class _PathNode extends StatelessWidget {
-  const _PathNode({
-    required this.icon,
-    this.active = false,
-    this.current = false,
-  });
-
-  final IconData icon;
-  final bool active;
-  final bool current;
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.themeTokens<AppTokens>();
-    final size = current ? 78.0 : 56.0;
-    final color = current
-        ? tokens.streak
-        : (active ? tokens.primary : const Color(0xffe5e7eb));
-    final shadow = current
-        ? tokens.streakDark
-        : (active ? tokens.primaryDark : Colors.transparent);
-
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-        border: Border.all(color: Colors.white, width: 4),
-        boxShadow: [
-          BoxShadow(color: shadow, offset: Offset(0, current ? 6 : 4)),
-        ],
-      ),
-      child: Icon(
-        icon,
-        color: active || current ? Colors.white : tokens.textMuted,
-      ),
-    );
-  }
-}
-
-class _TransitionStateOne extends StatelessWidget {
-  const _TransitionStateOne();
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.themeTokens<AppTokens>();
-    return Surface(
-      style: surfaceStyle.resolve(tokens, const [SurfaceTone.muted]),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'State 1: Deck List'.toUpperCase(),
-            style: appTextStyle.resolve(tokens, [AppTextRole.eyebrow]),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            height: 128,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: tokens.primaryLight.withValues(alpha: 0.55),
-              borderRadius: BorderRadius.circular(tokens.radius2xl),
-              border: Border.all(color: tokens.primary, width: 2),
-            ),
-            child: Text(
-              'JLPT N5 Core',
-              style: TextStyle(
-                color: tokens.primary,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _TransitionStateTwo extends StatelessWidget {
-  const _TransitionStateTwo();
-
-  @override
-  Widget build(BuildContext context) {
-    final tokens = context.themeTokens<AppTokens>();
-    return Surface(
-      style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
-      child: Column(
-        children: [
-          Text(
-            'State 2: Study Session'.toUpperCase(),
-            style: appTextStyle.resolve(tokens, [AppTextRole.eyebrow]),
-          ),
-          const SizedBox(height: 16),
-          Container(
-            height: 160,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: tokens.primary,
-              borderRadius: BorderRadius.circular(tokens.radius2xl),
-            ),
-            child: const Text(
-              'JLPT N5 Core\nStudy Session Active',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w900,
-                height: 1.4,
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
