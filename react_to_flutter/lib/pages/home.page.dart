@@ -23,7 +23,7 @@ class HomePage extends HookWidget {
           description: 'Build flashcards, MCQs, blanks, and matching pairs.',
           icon: Icons.edit_note,
           route: '/creator',
-          tone: TactileTone.primary,
+          tone: TactileTone.filled,
         ),
         _HomeDestination(
           title: 'Design System',
@@ -153,7 +153,7 @@ class _ThemeModeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TactileButton(
-      tone: selected ? TactileTone.primary : TactileTone.secondary,
+      tone: selected ? TactileTone.filled : TactileTone.ghost,
       size: TactileSize.sm,
       icon: icon,
       selected: selected,
@@ -185,19 +185,7 @@ class _DestinationCard extends HookWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: 52.w,
-                height: 52.w,
-                decoration: tactileButtonDecoration.resolve(tokens, [
-                  destination.tone,
-                ]),
-                child: Icon(
-                  destination.icon,
-                  color: tactileButtonText.resolve(tokens, [
-                    destination.tone,
-                  ]).color,
-                ),
-              ),
+              TactileButton(child: Icon(destination.icon)),
               SizedBox(height: 22.h),
               Text(
                 destination.title,
@@ -218,12 +206,14 @@ class _DestinationCard extends HookWidget {
                 ),
               ),
               SizedBox(height: 24.h),
-              TactileButton(
-                tone: destination.tone,
-                icon: Icons.arrow_forward,
-                expand: true,
-                onPressed: () => context.go(destination.route),
-                child: const Text('Open'),
+              SizedBox(
+                width: double.infinity,
+                child: TactileButton(
+                  tone: destination.tone,
+                  icon: Icons.arrow_forward,
+                  onPressed: () => context.go(destination.route),
+                  child: Text('Open'),
+                ),
               ),
             ],
           ),

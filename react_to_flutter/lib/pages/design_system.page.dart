@@ -294,7 +294,7 @@ class _ButtonLabSection extends StatelessWidget {
             title: 'Action Variants',
             children: [
               TactileButton(
-                tone: TactileTone.primary,
+                tone: TactileTone.filled,
                 size: TactileSize.lg,
                 child: Text('Primary Action'),
               ),
@@ -309,15 +309,19 @@ class _ButtonLabSection extends StatelessWidget {
           _ButtonGroup(
             title: 'Memory Rating',
             children: [
-              TactileButton(
-                tone: TactileTone.error,
-                expand: true,
-                child: _RatingText(label: 'Again', interval: '1M'),
+              SizedBox(
+                width: double.infinity,
+                child: TactileButton(
+                  tone: TactileTone.error,
+                  child: _RatingText(label: 'Again', interval: '1M'),
+                ),
               ),
-              TactileButton(
-                tone: TactileTone.success,
-                expand: true,
-                child: _RatingText(label: 'Good', interval: '10M'),
+              SizedBox(
+                width: double.infinity,
+                child: TactileButton(
+                  tone: TactileTone.success,
+                  child: _RatingText(label: 'Good', interval: '10M'),
+                ),
               ),
             ],
           ),

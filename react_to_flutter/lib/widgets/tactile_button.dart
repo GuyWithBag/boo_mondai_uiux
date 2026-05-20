@@ -7,25 +7,23 @@ import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
 
 class TactileButton extends HookWidget {
   const TactileButton({
-    required this.child,
+    this.child,
     this.onPressed,
     this.icon,
-    this.tone = TactileTone.secondary,
+    this.tone = TactileTone.ghost,
     this.size = TactileSize.md,
     this.selected = false,
-    this.expand = false,
     super.key,
-    this.textAlign,
+    this.mainAxisAlignment = MainAxisAlignment.center,
   });
 
-  final Widget child;
+  final Widget? child;
   final VoidCallback? onPressed;
   final IconData? icon;
   final TactileTone tone;
   final TactileSize size;
   final bool selected;
-  final bool expand;
-  final TextAlign? textAlign;
+  final MainAxisAlignment mainAxisAlignment;
 
   TactileState getState() {
     if (onPressed == null) {
@@ -70,11 +68,6 @@ class TactileButton extends HookWidget {
     final minSize = size == TactileSize.icon
         ? const Size.square(48)
         : Size.zero;
-    final rowAlignment = switch (textAlign) {
-      TextAlign.left || TextAlign.start => MainAxisAlignment.start,
-      TextAlign.right || TextAlign.end => MainAxisAlignment.end,
-      _ => MainAxisAlignment.center,
-    };
 
     final contentStyle = resolvedStyle.copyWith(
       transform: Matrix4.translationValues(
@@ -91,7 +84,8 @@ class TactileButton extends HookWidget {
       ),
       padding: padding,
       opacity: state.value == TactileState.disabled ? 0.5 : 1,
-      contentStyle: resolvedStyle.contentStyle.copyWith(textAlign: textAlign),
+      contentStyle: resolvedStyle.contentStyle,
+      alignment: Alignment.center,
     );
 
     final content = Surface(
@@ -99,28 +93,30 @@ class TactileButton extends HookWidget {
       duration: const Duration(milliseconds: 130),
       curve: Curves.easeOutCubic,
       child: Row(
-        mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
-        mainAxisAlignment: rowAlignment,
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: mainAxisAlignment,
         children: [
           if (icon != null) ...[
             Icon(icon),
-            if (size != TactileSize.icon) const SizedBox(width: 10),
+            if (child != null) const SizedBox(width: 10),
           ],
-          if (size != TactileSize.icon)
-            (expand ? Expanded(child: child) : Flexible(child: child)),
+          Flexible(child: child ?? SizedBox.shrink()),
         ],
       ),
     );
 
     final paintedContent = tone == TactileTone.dashed
-        ? CustomPaint(
-            foregroundPainter: _DashedBorderPainter(
-              color: state.value == TactileState.hovered
-                  ? tokens.primary
-                  : tokens.borderNeutralSubtle,
-              radius: tokens.radius2xl,
+        ? SizedBox(
+            width: double.infinity,
+            child: CustomPaint(
+              foregroundPainter: _DashedBorderPainter(
+                color: state.value == TactileState.hovered
+                    ? tokens.primary
+                    : tokens.borderNeutralSubtle,
+                radius: tokens.radius2xl,
+              ),
+              child: content,
             ),
-            child: content,
           )
         : content;
 
@@ -148,9 +144,7 @@ class TactileButton extends HookWidget {
                 onPressed?.call();
                 state.value = TactileState.hovered;
               },
-        child: expand
-            ? SizedBox(width: double.infinity, child: paintedContent)
-            : paintedContent,
+        child: paintedContent,
       ),
     );
   }

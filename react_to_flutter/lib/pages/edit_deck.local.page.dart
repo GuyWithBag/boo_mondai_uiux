@@ -136,7 +136,6 @@ class _StudioHeader extends HookWidget {
             icon: Icons.arrow_back,
             size: TactileSize.icon,
             onPressed: () => context.go('/'),
-            child: const SizedBox.shrink(),
           ),
           SizedBox(width: 20.w),
           Expanded(
@@ -202,13 +201,13 @@ class _StudioHeader extends HookWidget {
             tone: TactileTone.text,
             icon: Icons.settings,
             onPressed: () => context.go('/design-system'),
-            child: const Text('Settings'),
+            child: Text('Settings'),
           ),
           SizedBox(width: 12.w),
           TactileButton(
-            tone: TactileTone.primary,
+            tone: TactileTone.filled,
             onPressed: () {},
-            child: const Text('Save & Close'),
+            child: Text('Save & Close'),
           ),
         ],
       ),
@@ -252,7 +251,6 @@ class EditDeckSidebar extends StatelessWidget {
                   onPressed: () {},
                   icon: Icons.add,
                   size: TactileSize.icon,
-                  child: SizedBox.shrink(),
                 ),
               ],
             ),
@@ -265,7 +263,7 @@ class EditDeckSidebar extends StatelessWidget {
                   selected: true,
                   onPressed: () {},
                   icon: Icons.slideshow_outlined,
-                  textAlign: TextAlign.left,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   tone: TactileTone.ghost,
                   child: Text('勉強 (benkyou)'),
                 ),
@@ -273,7 +271,7 @@ class EditDeckSidebar extends StatelessWidget {
                 TactileButton(
                   icon: Icons.list,
                   onPressed: () {},
-                  textAlign: TextAlign.left,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   tone: TactileTone.text,
                   child: Text('Which particle is...'),
                 ),
@@ -309,9 +307,6 @@ class _FormatSelector extends StatelessWidget {
             TactileButton(
               icon: formats[index].$1,
               selected: selectedIndex == index,
-              tone: selectedIndex == index
-                  ? TactileTone.ghost
-                  : TactileTone.secondary,
               onPressed: () => onChanged(index),
               child: Text(formats[index].$2),
             ),
@@ -465,9 +460,8 @@ class _McqOptionsPanel extends StatelessWidget {
           TactileButton(
             icon: Icons.add,
             tone: TactileTone.dashed,
-            expand: true,
             onPressed: () {},
-            child: const Text('Add Option'),
+            child: Text('Add Option'),
           ),
         ],
       ),
@@ -486,39 +480,12 @@ class MultipleChoiceOption extends HookWidget {
     final tokens = context.themeTokens<AppTokens>();
     final controller = useTextEditingController(text: value);
 
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: correct
-          ? tactileButtonDecoration.resolve(tokens, const [TactileTone.success])
-          : tactileButtonDecoration.resolve(tokens),
+    return TactileButton(
+      tone: correct ? TactileTone.success : TactileTone.ghost,
+      onPressed: () {},
       child: Row(
         children: [
-          Container(
-            width: 24,
-            height: 24,
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              border: Border.all(
-                color: correct
-                    ? tokens.actionSuccess
-                    : tokens.borderNeutralSubtle,
-                width: 3,
-              ),
-            ),
-            child: correct
-                ? Center(
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      decoration: BoxDecoration(
-                        color: tokens.actionSuccess,
-                        shape: BoxShape.circle,
-                      ),
-                    ),
-                  )
-                : null,
-          ),
+          TactileRadioCircle(correct: correct),
           Expanded(
             child: TextField(
               controller: controller,
@@ -537,6 +504,42 @@ class MultipleChoiceOption extends HookWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class TactileRadioCircle extends StatelessWidget {
+  const TactileRadioCircle({required this.correct});
+
+  final bool correct;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.themeTokens<AppTokens>();
+
+    return Container(
+      width: 24,
+      height: 24,
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(
+          color: correct ? tokens.actionSuccess : tokens.borderNeutralSubtle,
+          width: 3,
+        ),
+      ),
+      child: correct
+          ? Center(
+              child: Container(
+                width: 10,
+                height: 10,
+                decoration: BoxDecoration(
+                  color: tokens.actionSuccess,
+                  shape: BoxShape.circle,
+                ),
+              ),
+            )
+          : null,
     );
   }
 }
@@ -582,28 +585,8 @@ class FillInTheBlanks extends StatelessWidget {
                         height: 1.6,
                       ),
                     ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 8),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 6,
-                      ),
-                      decoration: tactileButtonDecoration
-                          .resolve(tokens, const [TactileTone.primary])
-                          .copyWith(
-                            borderRadius: BorderRadius.circular(
-                              tokens.radiusXl,
-                            ),
-                          ),
-                      child: const Text(
-                        '図書館',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 30,
-                          fontWeight: FontWeight.w900,
-                        ),
-                      ),
-                    ),
+
+                    TactileButton(tone: TactileTone.filled, child: Text('図書館')),
                     Text(
                       'で勉強します。',
                       style: TextStyle(
@@ -621,7 +604,7 @@ class FillInTheBlanks extends StatelessWidget {
                   child: TactileButton(
                     icon: Icons.cleaning_services,
                     onPressed: () {},
-                    child: const Text('Create Blank'),
+                    child: Text('Create Blank'),
                   ),
                 ),
               ],
@@ -641,22 +624,7 @@ class FillInTheBlanks extends StatelessWidget {
             style: surfaceStyle.resolve(tokens, const [SurfaceTone.muted]),
             child: Row(
               children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  alignment: Alignment.center,
-                  decoration: tactileButtonDecoration.resolve(tokens, const [
-                    TactileTone.ghost,
-                  ]),
-                  child: Text(
-                    '1',
-                    style: TextStyle(
-                      color: tokens.primary,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
+                TactileButton(child: Text('1'), size: TactileSize.lg),
                 const SizedBox(width: 20),
                 Expanded(
                   child: Column(
@@ -737,9 +705,8 @@ class MatchingTypeEditor extends StatelessWidget {
           TactileButton(
             icon: Icons.add,
             tone: TactileTone.dashed,
-            expand: true,
             onPressed: () {},
-            child: const Text('Add Pair'),
+            child: Text('Add Pair'),
           ),
         ],
       ),
