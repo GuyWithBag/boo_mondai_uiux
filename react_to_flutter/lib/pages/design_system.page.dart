@@ -33,6 +33,7 @@ class DesignSystemPage extends HookWidget {
                       const _PhilosophySection(),
                       _ColorSection(tokens: tokens),
                       const _TypographySection(),
+                      const _SurfaceSection(),
                       const _ButtonLabSection(),
                       const _RoadmapSection(),
                     ],
@@ -44,7 +45,7 @@ class DesignSystemPage extends HookWidget {
           Positioned(
             top: 32,
             right: 32,
-            child: TactileButton.iconOnly(
+            child: TactileButton.icon(
               icon: Icons.close,
               onPressed: () => context.go('/'),
             ),
@@ -345,7 +346,7 @@ class _ButtonLabSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DesignSection(
-      title: '04. The Button Lab',
+      title: '05. The Button Lab',
       child: _ResponsiveGrid(
         minItemWidth: 320,
         children: [
@@ -354,31 +355,31 @@ class _ButtonLabSection extends StatelessWidget {
             children: [
               TactileButton(
                 tone: TactileTone.filled,
-                icon: Icons.play_arrow,
+                leading: Icon(Icons.play_arrow),
                 onPressed: () {},
                 child: Text('Filled'),
               ),
               TactileButton(
                 tone: TactileTone.ghost,
-                icon: Icons.layers_outlined,
+                leading: Icon(Icons.layers_outlined),
                 onPressed: () {},
                 child: Text('Ghost'),
               ),
               TactileButton(
                 tone: TactileTone.text,
-                icon: Icons.link,
+                leading: Icon(Icons.link),
                 onPressed: () {},
                 child: Text('Text'),
               ),
               TactileButton(
                 tone: TactileTone.dashed,
-                icon: Icons.add,
+                leading: Icon(Icons.add),
                 onPressed: () {},
                 child: Text('Dashed'),
               ),
               TactileButton(
                 tone: TactileTone.streak,
-                icon: Icons.local_fire_department,
+                leading: Icon(Icons.local_fire_department),
                 onPressed: () {},
                 child: Text('Streak'),
               ),
@@ -389,25 +390,25 @@ class _ButtonLabSection extends StatelessWidget {
             children: [
               TactileButton(
                 tone: TactileTone.again,
-                icon: Icons.replay,
+                leading: Icon(Icons.replay),
                 onPressed: () {},
                 child: Text('Again'),
               ),
               TactileButton(
                 tone: TactileTone.hard,
-                icon: Icons.priority_high,
+                leading: Icon(Icons.priority_high),
                 onPressed: () {},
                 child: Text('Hard'),
               ),
               TactileButton(
                 tone: TactileTone.good,
-                icon: Icons.check,
+                leading: Icon(Icons.check),
                 onPressed: () {},
                 child: Text('Good'),
               ),
               TactileButton(
                 tone: TactileTone.easy,
-                icon: Icons.bolt,
+                leading: Icon(Icons.bolt),
                 onPressed: () {},
                 child: Text('Easy'),
               ),
@@ -418,23 +419,26 @@ class _ButtonLabSection extends StatelessWidget {
             children: [
               TactileButton(
                 tone: TactileTone.success,
-                icon: Icons.check_circle,
+                leading: Icon(Icons.check_circle),
                 onPressed: () {},
                 child: Text('Success'),
               ),
               TactileButton(
                 tone: TactileTone.error,
-                icon: Icons.cancel,
+                leading: Icon(Icons.cancel),
                 onPressed: () {},
                 child: Text('Error'),
               ),
               TactileButton(
                 selected: true,
-                icon: Icons.star,
+                leading: Icon(Icons.star),
                 onPressed: () {},
                 child: Text('Selected'),
               ),
-              TactileButton(icon: Icons.block, child: Text('Disabled')),
+              TactileButton(
+                leading: Icon(Icons.block),
+                child: Text('Disabled'),
+              ),
             ],
           ),
           _ButtonGroup(
@@ -442,23 +446,23 @@ class _ButtonLabSection extends StatelessWidget {
             children: [
               TactileButton(
                 size: TactileSize.sm,
-                icon: Icons.text_fields,
+                leading: Icon(Icons.text_fields),
                 onPressed: () {},
                 child: Text('Small'),
               ),
               TactileButton(
                 size: TactileSize.md,
-                icon: Icons.text_fields,
+                leading: Icon(Icons.text_fields),
                 onPressed: () {},
                 child: Text('Medium'),
               ),
               TactileButton(
                 size: TactileSize.lg,
-                icon: Icons.text_fields,
+                leading: Icon(Icons.text_fields),
                 onPressed: () {},
                 child: Text('Large'),
               ),
-              TactileButton.iconOnly(icon: Icons.settings, onPressed: () {}),
+              TactileButton.icon(icon: Icons.settings, onPressed: () {}),
             ],
           ),
           _ButtonGroup(
@@ -467,8 +471,8 @@ class _ButtonLabSection extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: TactileButton(
-                  alignment: TactileAlign.start,
-                  icon: Icons.format_align_left,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  leading: Icon(Icons.format_align_left),
                   onPressed: () {},
                   child: Text('Start aligned'),
                 ),
@@ -476,19 +480,119 @@ class _ButtonLabSection extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: TactileButton(
-                  alignment: TactileAlign.center,
-                  icon: Icons.format_align_center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  leading: Icon(Icons.format_align_center),
                   onPressed: () {},
                   child: Text('Center aligned'),
                 ),
               ),
               TactileButton(
-                alignment: TactileAlign.fit,
-                icon: Icons.fit_screen,
+                leading: Icon(Icons.fit_screen),
                 onPressed: () {},
                 child: Text('Fit content'),
               ),
             ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SurfaceSection extends StatelessWidget {
+  const _SurfaceSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return DesignSection(
+      title: '04. Surface Variants',
+      child: _ResponsiveGrid(
+        minItemWidth: 300,
+        children: const [
+          _SurfaceSample(
+            title: 'Surface',
+            tone: SurfaceTone.surface,
+            description: 'Default panel surface.',
+          ),
+          _SurfaceSample(
+            title: 'Primary Outline',
+            tone: SurfaceTone.primaryOutline,
+            description: 'White card with primary outline.',
+          ),
+          _SurfaceSample(
+            title: 'Muted',
+            tone: SurfaceTone.muted,
+            description: 'Soft inset grouping surface.',
+          ),
+          _SurfaceSample(
+            title: 'Dark',
+            tone: SurfaceTone.dark,
+            description: 'High-emphasis dark surface.',
+            dark: true,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _SurfaceSample extends StatelessWidget {
+  const _SurfaceSample({
+    required this.title,
+    required this.tone,
+    required this.description,
+    this.dark = false,
+  });
+
+  final String title;
+  final SurfaceTone tone;
+  final String description;
+  final bool dark;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.themeTokens<AppTokens>();
+    final titleColor = dark ? tokens.colorTextOnBrand : tokens.textPrimary;
+    final bodyColor = dark
+        ? tokens.colorTextOnBrand.withValues(alpha: 0.78)
+        : tokens.textSecondary;
+
+    return Surface(
+      style: surfaceStyle.resolve(tokens, [tone]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: appTextStyle
+                .resolve(tokens, [
+                  TextSize.labelLarge,
+                  TextWeight.heavy,
+                  TextTone.primary,
+                ])
+                .copyWith(color: titleColor),
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'SurfaceTone.$tone'.replaceFirst('SurfaceTone.', ''),
+            style: appTextStyle
+                .resolve(tokens, [
+                  TextSize.labelSmall,
+                  TextWeight.heavy,
+                  TextTone.muted,
+                ])
+                .copyWith(color: bodyColor),
+          ),
+          const SizedBox(height: 14),
+          Text(
+            description,
+            style: appTextStyle
+                .resolve(tokens, [
+                  TextSize.label,
+                  TextWeight.body,
+                  TextTone.secondary,
+                ])
+                .copyWith(color: bodyColor),
           ),
         ],
       ),
@@ -521,7 +625,7 @@ class _RoadmapSection extends StatelessWidget {
     ];
 
     return DesignSection(
-      title: '06. Accessibility & Flutter Roadmap',
+      title: '07. Accessibility & Flutter Roadmap',
       child: Surface(
         style: surfaceStyle.resolve(tokens, const [SurfaceTone.dark]),
         child: Column(

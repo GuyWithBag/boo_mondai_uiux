@@ -26,6 +26,13 @@ class HomePage extends HookWidget {
           tone: TactileTone.filled,
         ),
         _HomeDestination(
+          title: 'Study Session',
+          description: 'Review the queue with tactile answer feedback.',
+          icon: Icons.school,
+          route: '/study',
+          tone: TactileTone.streak,
+        ),
+        _HomeDestination(
           title: 'Design System',
           description: 'Review the tactile tokens, typography, and components.',
           icon: Icons.palette,
@@ -155,7 +162,7 @@ class _ThemeModeButton extends StatelessWidget {
     return TactileButton(
       tone: selected ? TactileTone.filled : TactileTone.ghost,
       size: TactileSize.sm,
-      icon: icon,
+      leading: Icon(icon),
       selected: selected,
       onPressed: onPressed,
       child: Text(label),
@@ -210,7 +217,7 @@ class _DestinationCard extends HookWidget {
                 width: double.infinity,
                 child: TactileButton(
                   tone: destination.tone,
-                  icon: Icons.arrow_forward,
+                  leading: Icon(Icons.arrow_forward),
                   onPressed: () => context.go(destination.route),
                   child: Text('Open'),
                 ),

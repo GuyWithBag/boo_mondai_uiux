@@ -9,23 +9,27 @@ class TactileButton extends HookWidget {
   const TactileButton({
     this.child,
     this.onPressed,
-    this.icon,
+    this.leading,
+    this.trailing,
     this.tone = TactileTone.ghost,
     this.size = TactileSize.md,
+    this.depth = TactileDepth.elevated,
     this.selected = false,
+    this.mainAxisAlignment = MainAxisAlignment.center,
     super.key,
-    this.alignment = TactileAlign.center,
   });
 
   final Widget? child;
   final VoidCallback? onPressed;
-  final IconData? icon;
+  final Widget? leading;
+  final Widget? trailing;
   final TactileTone tone;
   final TactileSize size;
+  final TactileDepth depth;
   final bool selected;
-  final TactileAlign alignment;
+  final MainAxisAlignment mainAxisAlignment;
 
-  static TactileButton iconOnly({
+  static TactileButton icon({
     VoidCallback? onPressed,
     IconData? icon,
     TactileTone tone = TactileTone.ghost,
@@ -33,7 +37,7 @@ class TactileButton extends HookWidget {
   }) {
     return TactileButton(
       onPressed: onPressed,
-      icon: icon,
+      leading: icon == null ? null : Icon(icon),
       tone: tone,
       size: TactileSize.icon,
       selected: selected,
@@ -71,7 +75,7 @@ class TactileButton extends HookWidget {
       tone,
       size,
       state.value,
-      alignment,
+      depth,
     ]);
 
     final padding = switch (size) {
@@ -97,7 +101,8 @@ class TactileButton extends HookWidget {
     final contentStyle = resolvedStyle.copyWith(
       transform: Matrix4.translationValues(
         0,
-        state.value == TactileState.pressed &&
+        depth == TactileDepth.elevated &&
+                state.value == TactileState.pressed &&
                 !(state.value == TactileState.disabled)
             ? 4
             : 0,
@@ -108,7 +113,6 @@ class TactileButton extends HookWidget {
         minHeight: minSize.height,
       ),
       padding: padding,
-      opacity: state.value == TactileState.disabled ? 0.5 : 1,
       contentStyle: resolvedStyle.contentStyle,
     );
 
@@ -118,12 +122,17 @@ class TactileButton extends HookWidget {
       curve: Curves.easeOutCubic,
       child: Row(
         mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: mainAxisAlignment,
         children: [
-          if (icon != null) ...[
-            Icon(icon),
+          if (leading != null) ...[
+            leading!,
             if (child != null) const SizedBox(width: 10),
           ],
           if (child != null) Flexible(child: child!),
+          if (trailing != null) ...[
+            if (child != null || leading != null) const SizedBox(width: 10),
+            trailing!,
+          ],
         ],
       ),
     );

@@ -27,7 +27,7 @@ class FormatSelector extends StatelessWidget {
         children: [
           for (var index = 0; index < formats.length; index++) ...[
             TactileButton(
-              icon: formats[index].$1,
+              leading: Icon(formats[index].$1),
               selected: selectedIndex == index,
               onPressed: () => onChanged(index),
               child: Text(formats[index].$2, style: TextStyle(fontSize: 14)),

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:react_to_flutter/widgets/edit_deck_local/tactile_radio_circle.dart';
 import 'package:theme_variants/theme_variants.dart';
 
 import '../../theme/app_tokens.dart';
 import '../../variant_styles/variant_styles.barrel.dart';
 import '../../widgets/tactile_button.dart';
-import 'multiple_choice_option.dart';
 
 class MultipleChoiceOptionsPanel extends StatelessWidget {
   const MultipleChoiceOptionsPanel({super.key});
@@ -52,13 +52,25 @@ class MultipleChoiceOptionsPanel extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 22),
-          const MultipleChoiceOption(correct: true, value: 'To study'),
+          TactileButton(
+            tone: TactileTone.success,
+            depth: TactileDepth.flat,
+            leading: TactileRadioCircle(correct: true),
+            mainAxisAlignment: MainAxisAlignment.start,
+            child: Text('To study'),
+          ),
           const SizedBox(height: 14),
-          const MultipleChoiceOption(value: 'To eat'),
+          TactileButton(
+            tone: TactileTone.ghost,
+            depth: TactileDepth.flat,
+            mainAxisAlignment: MainAxisAlignment.start,
+            leading: TactileRadioCircle(correct: false),
+            child: Text('To eat'),
+          ),
           const Spacer(),
           const SizedBox(height: 20),
           TactileButton(
-            icon: Icons.add,
+            leading: Icon(Icons.add),
             tone: TactileTone.dashed,
             onPressed: () {},
             child: Text('Add Option'),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:react_to_flutter/theme/app_tokens.dart';
 import 'package:theme_variants/theme_variants.dart';
 
-enum SurfaceTone { surface, selected, success, muted, dark }
+enum SurfaceTone { surface, muted, dark, primaryOutline }
 
 final surfaceStyle = VariantStyle.surfaceParts<AppTokens>(
   base: (tokens) => {
@@ -30,34 +30,23 @@ final surfaceStyle = VariantStyle.surfaceParts<AppTokens>(
   defaultVariants: const [SurfaceTone.surface],
   variants: {
     SurfaceTone.surface: (_) => const {},
-    SurfaceTone.selected: (tokens) => {
+
+    SurfaceTone.primaryOutline: (tokens) => {
       SurfaceStylePart.decoration({
-        DecorationPart.color(tokens.primarySoft),
+        DecorationPart.color(tokens.backgroundSurface),
         DecorationPart.border(
-          Border.all(
-            color: tokens.primaryLight,
-            width: tokens.borderWidthDefault,
-          ),
+          Border.all(color: tokens.primary, width: tokens.borderWidthDefault),
         ),
         DecorationPart.boxShadow([
           BoxShadow(
-            color: tokens.primaryLight,
-            offset: Offset(0, tokens.shadowGhostOffset),
+            color: tokens.primary.withValues(alpha: 0.16),
+            offset: const Offset(0, 8),
+            blurRadius: 30,
           ),
         ]),
       }),
     },
-    SurfaceTone.success: (tokens) => {
-      SurfaceStylePart.decoration({
-        DecorationPart.color(tokens.greenSoft),
-        DecorationPart.border(
-          Border.all(
-            color: tokens.actionSuccess,
-            width: tokens.borderWidthDefault,
-          ),
-        ),
-      }),
-    },
+
     SurfaceTone.muted: (tokens) => {
       SurfaceStylePart.decoration({
         DecorationPart.color(tokens.softGray),

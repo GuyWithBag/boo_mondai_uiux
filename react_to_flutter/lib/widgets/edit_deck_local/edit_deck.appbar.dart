@@ -31,7 +31,7 @@ class EditDeckAppbar extends HookWidget implements PreferredSizeWidget {
           horizontal: horizontalPadding,
           vertical: verticalPadding + 4,
         ),
-        child: TactileButton.iconOnly(
+        child: TactileButton.icon(
           icon: Icons.arrow_back,
           onPressed: () {
             if (context.canPop()) {
@@ -110,7 +110,7 @@ class EditDeckAppbar extends HookWidget implements PreferredSizeWidget {
             children: [
               TactileButton(
                 tone: TactileTone.text,
-                icon: Icons.settings,
+                leading: Icon(Icons.settings),
                 onPressed: () => context.go('/design-system'),
                 child: Text('Settings'),
               ),

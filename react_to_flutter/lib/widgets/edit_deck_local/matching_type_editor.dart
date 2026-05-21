@@ -60,7 +60,7 @@ class MatchingTypeEditor extends StatelessWidget {
           const MatchPair(term: '猫', match: 'Cat'),
           const SizedBox(height: 28),
           TactileButton(
-            icon: Icons.add,
+            leading: Icon(Icons.add),
             tone: TactileTone.dashed,
             onPressed: () {},
             child: Text('Add Pair'),

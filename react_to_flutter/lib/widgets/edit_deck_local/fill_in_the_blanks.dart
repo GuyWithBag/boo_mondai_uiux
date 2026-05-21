@@ -56,7 +56,6 @@ class FillInTheBlanks extends StatelessWidget {
                     ),
                     TactileButton(
                       tone: TactileTone.filled,
-                      alignment: TactileAlign.fit,
                       child: Text(
                         '図書館',
                         style: appTextStyle.resolve(tokens, [
@@ -81,7 +80,7 @@ class FillInTheBlanks extends StatelessWidget {
                 Align(
                   alignment: Alignment.centerRight,
                   child: TactileButton(
-                    icon: Icons.cleaning_services,
+                    leading: Icon(Icons.cleaning_services),
                     onPressed: () {},
                     child: Text('Create Blank'),
                   ),

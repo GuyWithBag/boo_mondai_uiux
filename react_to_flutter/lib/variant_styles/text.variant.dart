@@ -2,11 +2,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:react_to_flutter/theme/app_tokens.dart';
 import 'package:theme_variants/theme_variants.dart';
 
-enum TextSize { header, labelLarge, label, labelSmall, bodyLarge }
+enum TextSize {
+  header,
+  labelLarge,
+  label,
+  labelSmall,
+  bodyLarge,
+  cardFront,
+  cardBackFront,
+  cardBackContent,
+}
 
 enum TextWeight { base, body, strong, heavy }
 
-enum TextTone { primary, secondary, muted }
+enum TextTone { primary, secondary, muted, brand }
 
 final appTextStyle = VariantStyle.textParts<AppTokens>(
   base: (tokens) => {
@@ -39,6 +48,18 @@ final appTextStyle = VariantStyle.textParts<AppTokens>(
       TextStylePart.fontSize(tokens.textSizeBodyLarge.sp),
       TextStylePart.height(tokens.lineHeightFieldDisplay),
     },
+    TextSize.cardFront: (tokens) => {
+      TextStylePart.fontSize(tokens.textSizeCardFront.sp),
+      TextStylePart.height(tokens.lineHeightTextDisplay),
+    },
+    TextSize.cardBackFront: (tokens) => {
+      TextStylePart.fontSize(tokens.textSizeCardBackFront.sp),
+      TextStylePart.height(tokens.lineHeightTextTitle),
+    },
+    TextSize.cardBackContent: (tokens) => {
+      TextStylePart.fontSize(tokens.textSizeCardBackContent.sp),
+      TextStylePart.height(tokens.lineHeightFieldDisplay),
+    },
     TextWeight.base: (tokens) => {
       TextStylePart.fontWeight(tokens.fontWeightTextBase),
     },
@@ -54,5 +75,6 @@ final appTextStyle = VariantStyle.textParts<AppTokens>(
     TextTone.primary: (tokens) => {TextStylePart.color(tokens.textPrimary)},
     TextTone.secondary: (tokens) => {TextStylePart.color(tokens.textSecondary)},
     TextTone.muted: (tokens) => {TextStylePart.color(tokens.textMuted)},
+    TextTone.brand: (tokens) => {TextStylePart.color(tokens.primary)},
   },
 );

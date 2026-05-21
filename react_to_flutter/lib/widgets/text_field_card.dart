@@ -5,6 +5,7 @@ import '../theme/app_tokens.dart';
 import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
 
 import 'tactile_button.dart';
+import 'variant_text_field.dart';
 
 class TextFieldCard extends StatelessWidget {
   const TextFieldCard({
@@ -36,17 +37,16 @@ class TextFieldCard extends StatelessWidget {
           ),
           SizedBox(height: tokens.spacePanelGapLg),
           Expanded(
-            child: TextField(
+            child: VariantTextField(
               maxLines: null,
               expands: true,
               textAlignVertical: TextAlignVertical.top,
-              style: TextStyle(
-                color: tokens.textPrimary,
-                fontSize: tokens.textSizeBodyLarge,
-                fontWeight: tokens.fontWeightTextStrong,
-                height: tokens.lineHeightFieldDisplay,
-              ),
-              decoration: InputDecoration.collapsed(hintText: placeholder),
+              placeholder: placeholder,
+              variants: const [
+                AppTextFieldSize.bodyLarge,
+                AppTextFieldFrame.none,
+                AppTextFieldTone.neutral,
+              ],
             ),
           ),
           Column(
@@ -57,12 +57,9 @@ class TextFieldCard extends StatelessWidget {
           ),
           Row(
             children: [
-              TactileButton.iconOnly(
-                onPressed: () {},
-                icon: Icons.image_outlined,
-              ),
+              TactileButton.icon(onPressed: () {}, icon: Icons.image_outlined),
               SizedBox(width: tokens.spacePanelGapSm),
-              TactileButton.iconOnly(onPressed: () {}, icon: Icons.mic),
+              TactileButton.icon(onPressed: () {}, icon: Icons.mic),
             ],
           ),
         ],

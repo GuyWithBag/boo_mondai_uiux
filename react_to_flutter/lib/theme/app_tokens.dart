@@ -127,6 +127,9 @@ typedef AppTokens = ({
   double textSizeLabel,
   double textSizeLabelSmall,
   double textSizeBodyLarge,
+  double textSizeCardFront,
+  double textSizeCardBackFront,
+  double textSizeCardBackContent,
   FontWeight fontWeightTextBase,
   FontWeight fontWeightTextBody,
   FontWeight fontWeightTextStrong,
@@ -163,6 +166,9 @@ final double textSizeLabelLarge = 16;
 final double textSizeLabel = 14;
 final double textSizeLabelSmall = 10;
 final double textSizeBodyLarge = 30;
+final double textSizeCardFront = 68;
+final double textSizeCardBackFront = 42;
+final double textSizeCardBackContent = 34;
 
 final FontWeight fontWeightTextBase = FontWeight.w700;
 final FontWeight fontWeightTextBody = FontWeight.w600;
@@ -232,6 +238,9 @@ final AppTokens defaultLight = (
   textSizeLabel: textSizeLabel,
   textSizeLabelSmall: textSizeLabelSmall,
   textSizeBodyLarge: textSizeBodyLarge,
+  textSizeCardFront: textSizeCardFront,
+  textSizeCardBackFront: textSizeCardBackFront,
+  textSizeCardBackContent: textSizeCardBackContent,
   fontWeightTextBase: fontWeightTextBase,
   fontWeightTextBody: fontWeightTextBody,
   fontWeightTextStrong: fontWeightTextStrong,
@@ -301,6 +310,9 @@ final AppTokens defaultDark = (
   textSizeLabel: textSizeLabel,
   textSizeLabelSmall: textSizeLabelSmall,
   textSizeBodyLarge: textSizeBodyLarge,
+  textSizeCardFront: textSizeCardFront,
+  textSizeCardBackFront: textSizeCardBackFront,
+  textSizeCardBackContent: textSizeCardBackContent,
   fontWeightTextBase: fontWeightTextBase,
   fontWeightTextBody: fontWeightTextBody,
   fontWeightTextStrong: fontWeightTextStrong,

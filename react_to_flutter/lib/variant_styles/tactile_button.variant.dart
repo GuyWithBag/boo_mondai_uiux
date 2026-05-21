@@ -7,6 +7,8 @@ enum TactileSize { sm, md, lg, icon }
 
 enum TactileState { idle, hovered, selected, disabled, pressed }
 
+enum TactileDepth { flat, elevated }
+
 enum TactileTone {
   filled,
   ghost,
@@ -20,8 +22,6 @@ enum TactileTone {
   good,
   easy,
 }
-
-enum TactileAlign { fit, start, center }
 
 final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
   base: (tokens) => {
@@ -56,7 +56,7 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
     TactileTone.ghost,
     TactileSize.md,
     TactileState.idle,
-    TactileAlign.fit,
+    TactileDepth.elevated,
   ],
   variants: {
     TactileTone.filled: (tokens) => {
@@ -293,9 +293,10 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
     TactileState.disabled: (_) => {
       SurfaceStylePart.decoration({DecorationPart.boxShadow(const [])}),
     },
-    TactileAlign.start: (_) => {SurfaceStylePart.alignment(.centerStart)},
-    TactileAlign.center: (_) => {SurfaceStylePart.alignment(.center)},
-    TactileAlign.fit: (_) => {},
+    TactileDepth.elevated: (_) => const <StylePart<SurfaceStyle>>{},
+    TactileDepth.flat: (_) => {
+      SurfaceStylePart.decoration({DecorationPart.boxShadow(const [])}),
+    },
   },
   compoundVariants: [
     CompoundVariantParts<AppTokens, SurfaceStyle>(
@@ -357,6 +358,53 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
       build: (tokens) => {
         SurfaceStylePart.decoration({
           DecorationPart.color(tokens.ratingEasyHoverBackground),
+        }),
+      },
+    ),
+    CompoundVariantParts<AppTokens, SurfaceStyle>(
+      when: const {TactileDepth.flat, TactileState.disabled, TactileTone.ghost},
+      build: (_) => {SurfaceStylePart.opacity(0.5)},
+    ),
+    CompoundVariantParts<AppTokens, SurfaceStyle>(
+      when: const {TactileTone.success, TactileState.disabled},
+      build: (tokens) => {
+        SurfaceStylePart.decoration({
+          DecorationPart.color(tokens.actionSuccess.withValues(alpha: 0.08)),
+          DecorationPart.border(
+            Border.all(
+              color: tokens.actionSuccess,
+              width: tokens.borderWidthDefault,
+            ),
+          ),
+          DecorationPart.boxShadow([
+            BoxShadow(
+              color: tokens.actionSuccess.withValues(alpha: 0.32),
+              offset: Offset(0, tokens.shadowFeedbackOffset),
+            ),
+          ]),
+        }),
+        SurfaceStylePart.text({TextStylePart.color(tokens.actionSuccess)}),
+        SurfaceStylePart.icon({IconThemePart.color(tokens.actionSuccess)}),
+      },
+    ),
+    CompoundVariantParts<AppTokens, SurfaceStyle>(
+      when: const {TactileTone.error, TactileState.disabled},
+      build: (tokens) => {
+        SurfaceStylePart.decoration({
+          DecorationPart.color(tokens.actionError.withValues(alpha: 0.08)),
+          DecorationPart.border(
+            Border.all(
+              color: tokens.actionError.withValues(alpha: 0.35),
+              width: tokens.borderWidthDefault,
+            ),
+          ),
+          DecorationPart.boxShadow(const []),
+        }),
+        SurfaceStylePart.text({
+          TextStylePart.color(tokens.actionError.withValues(alpha: 0.7)),
+        }),
+        SurfaceStylePart.icon({
+          IconThemePart.color(tokens.actionError.withValues(alpha: 0.7)),
         }),
       },
     ),
