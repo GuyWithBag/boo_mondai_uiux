@@ -26,7 +26,6 @@ class EditDeckPage extends HookWidget {
     final tokens = context.themeTokens<AppTokens>();
 
     return Scaffold(
-      backgroundColor: tokens.backgroundPage,
       appBar: EditDeckAppbar(tokens: tokens),
       body: SafeArea(
         child: Column(

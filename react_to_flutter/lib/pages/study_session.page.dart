@@ -95,7 +95,6 @@ class _StudySessionScaffold extends HookWidget {
     }
 
     return Scaffold(
-      backgroundColor: tokens.backgroundPage,
       body: SafeArea(
         child: Column(
           children: [
