@@ -16,7 +16,6 @@ class DesignSystemPage extends HookWidget {
     final tokens = context.themeTokens<AppTokens>();
 
     return Scaffold(
-      backgroundColor: tokens.backgroundPage,
       body: Stack(
         children: [
           SafeArea(
