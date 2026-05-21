@@ -39,6 +39,13 @@ class HomePage extends HookWidget {
           route: '/design-system',
           tone: TactileTone.ghost,
         ),
+        _HomeDestination(
+          title: 'Deck List',
+          description: 'Browse local decks and open one to study or edit.',
+          icon: Icons.view_list,
+          route: '/decks',
+          tone: TactileTone.good,
+        ),
       ],
     );
 

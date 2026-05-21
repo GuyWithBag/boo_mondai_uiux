@@ -352,144 +352,144 @@ class _ButtonLabSection extends StatelessWidget {
         minItemWidth: 320,
         children: [
           _ButtonGroup(
-            title: 'Tone',
+            title: 'TactileTone',
             children: [
               TactileButton(
                 tone: TactileTone.filled,
                 leading: Icon(Icons.play_arrow),
                 onPressed: () {},
-                child: Text('Filled'),
+                child: Text('TactileTone.filled'),
               ),
               TactileButton(
                 tone: TactileTone.ghost,
                 leading: Icon(Icons.layers_outlined),
                 onPressed: () {},
-                child: Text('Ghost'),
+                child: Text('TactileTone.ghost'),
               ),
               TactileButton(
                 tone: TactileTone.text,
                 leading: Icon(Icons.link),
                 onPressed: () {},
-                child: Text('Text'),
+                child: Text('TactileTone.text'),
               ),
               TactileButton(
                 tone: TactileTone.dashed,
                 leading: Icon(Icons.add),
                 onPressed: () {},
-                child: Text('Dashed'),
+                child: Text('TactileTone.dashed'),
               ),
               TactileButton(
                 tone: TactileTone.streak,
                 leading: Icon(Icons.local_fire_department),
                 onPressed: () {},
-                child: Text('Streak'),
+                child: Text('TactileTone.streak'),
               ),
             ],
           ),
           _ButtonGroup(
-            title: 'Rating',
+            title: 'Rating TactileTone',
             children: [
               TactileButton(
                 tone: TactileTone.again,
                 leading: Icon(Icons.replay),
                 onPressed: () {},
-                child: Text('Again'),
+                child: Text('TactileTone.again'),
               ),
               TactileButton(
                 tone: TactileTone.hard,
                 leading: Icon(Icons.priority_high),
                 onPressed: () {},
-                child: Text('Hard'),
+                child: Text('TactileTone.hard'),
               ),
               TactileButton(
                 tone: TactileTone.good,
                 leading: Icon(Icons.check),
                 onPressed: () {},
-                child: Text('Good'),
+                child: Text('TactileTone.good'),
               ),
               TactileButton(
                 tone: TactileTone.easy,
                 leading: Icon(Icons.bolt),
                 onPressed: () {},
-                child: Text('Easy'),
+                child: Text('TactileTone.easy'),
               ),
             ],
           ),
           _ButtonGroup(
-            title: 'Feedback',
+            title: 'Feedback TactileTone',
             children: [
               TactileButton(
                 tone: TactileTone.success,
                 leading: Icon(Icons.check_circle),
                 onPressed: () {},
-                child: Text('Success'),
+                child: Text('TactileTone.success'),
               ),
               TactileButton(
                 tone: TactileTone.error,
                 leading: Icon(Icons.cancel),
                 onPressed: () {},
-                child: Text('Error'),
+                child: Text('TactileTone.error'),
               ),
               TactileButton(
                 tone: TactileTone.error,
                 depth: TactileDepth.flat,
-                child: Text('Flat disabled error'),
+                child: Text('TactileTone.error + TactileDepth.flat'),
               ),
             ],
           ),
           _ButtonGroup(
-            title: 'State',
+            title: 'TactileState + TactileDepth',
             children: [
               TactileButton(
                 selected: true,
                 leading: Icon(Icons.star),
                 onPressed: () {},
-                child: Text('Selected'),
+                child: Text('TactileState.selected'),
               ),
               TactileButton(
                 leading: Icon(Icons.block),
-                child: Text('Disabled'),
+                child: Text('TactileState.disabled'),
               ),
               TactileButton(
                 tone: TactileTone.filled,
                 depth: TactileDepth.flat,
                 onPressed: () {},
-                child: Text('Flat filled'),
+                child: Text('TactileDepth.flat'),
               ),
               TactileButton(
                 depth: TactileDepth.flat,
                 leading: Icon(Icons.radio_button_checked),
                 onPressed: () {},
-                child: Text('Flat ghost'),
+                child: Text('TactileDepth.flat + TactileTone.ghost'),
               ),
             ],
           ),
           _ButtonGroup(
-            title: 'Size',
+            title: 'TactileSize',
             children: [
               TactileButton(
                 size: TactileSize.sm,
                 leading: Icon(Icons.text_fields),
                 onPressed: () {},
-                child: Text('Small'),
+                child: Text('TactileSize.sm'),
               ),
               TactileButton(
                 size: TactileSize.md,
                 leading: Icon(Icons.text_fields),
                 onPressed: () {},
-                child: Text('Medium'),
+                child: Text('TactileSize.md'),
               ),
               TactileButton(
                 size: TactileSize.lg,
                 leading: Icon(Icons.text_fields),
                 onPressed: () {},
-                child: Text('Large'),
+                child: Text('TactileSize.lg'),
               ),
               TactileButton.icon(icon: Icons.settings, onPressed: () {}),
             ],
           ),
           _ButtonGroup(
-            title: 'Content Layout',
+            title: 'TactileButton Layout Props',
             children: [
               SizedBox(
                 width: double.infinity,
@@ -498,7 +498,7 @@ class _ButtonLabSection extends StatelessWidget {
                   leading: Icon(Icons.format_align_left),
                   trailing: Icon(Icons.chevron_right),
                   onPressed: () {},
-                  child: Text('Leading and trailing'),
+                  child: Text('leading + trailing + start'),
                 ),
               ),
               SizedBox(
@@ -507,7 +507,7 @@ class _ButtonLabSection extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   leading: Icon(Icons.format_align_center),
                   onPressed: () {},
-                  child: Text('Center aligned'),
+                  child: Text('mainAxisAlignment.center'),
                 ),
               ),
               SizedBox(
@@ -517,13 +517,13 @@ class _ButtonLabSection extends StatelessWidget {
                   leading: Icon(Icons.swap_horiz),
                   trailing: Icon(Icons.keyboard_arrow_down),
                   onPressed: () {},
-                  child: Text('Space between'),
+                  child: Text('mainAxisAlignment.spaceBetween'),
                 ),
               ),
               TactileButton(
                 leading: Icon(Icons.fit_screen),
                 onPressed: () {},
-                child: Text('Fit content'),
+                child: Text('mainAxisSize.min'),
               ),
             ],
           ),
@@ -546,7 +546,7 @@ class _TextFieldSection extends StatelessWidget {
         minItemWidth: 320,
         children: [
           _TextFieldSample(
-            title: 'No Frame / Body Large',
+            title: 'AppTextFieldFrame.none + AppTextFieldSize.bodyLarge',
             description: 'TextFieldCard content style.',
             child: Surface(
               style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
@@ -567,7 +567,7 @@ class _TextFieldSection extends StatelessWidget {
             ),
           ),
           _TextFieldSample(
-            title: 'Outline / Label Large',
+            title: 'AppTextFieldFrame.outline + AppTextFieldSize.labelLarge',
             description: 'Matching input and compact editable rows.',
             child: const VariantTextField(
               placeholder: 'Term or answer',
@@ -579,7 +579,7 @@ class _TextFieldSection extends StatelessWidget {
             ),
           ),
           _TextFieldSample(
-            title: 'Underline / Brand',
+            title: 'AppTextFieldFrame.underline + AppTextFieldTone.brand',
             description: 'Fill-in-the-blank active answer field.',
             child: const SizedBox(
               width: 260,
@@ -594,7 +594,7 @@ class _TextFieldSection extends StatelessWidget {
             ),
           ),
           _TextFieldSample(
-            title: 'Underline / Success',
+            title: 'AppTextFieldFrame.underline + AppTextFieldTone.success',
             description: 'Revealed correct answer state.',
             child: const SizedBox(
               width: 260,
@@ -610,7 +610,7 @@ class _TextFieldSection extends StatelessWidget {
             ),
           ),
           _TextFieldSample(
-            title: 'Underline / Error',
+            title: 'AppTextFieldTone.error + AppTextFieldState.incorrect',
             description: 'Revealed incorrect answer state.',
             child: const SizedBox(
               width: 260,
@@ -688,22 +688,22 @@ class _SurfaceSection extends StatelessWidget {
         minItemWidth: 300,
         children: const [
           _SurfaceSample(
-            title: 'Surface',
+            title: 'SurfaceTone.surface',
             tone: SurfaceTone.surface,
             description: 'Default panel surface.',
           ),
           _SurfaceSample(
-            title: 'Primary Outline',
+            title: 'SurfaceTone.primaryOutline',
             tone: SurfaceTone.primaryOutline,
             description: 'White card with primary outline.',
           ),
           _SurfaceSample(
-            title: 'Muted',
+            title: 'SurfaceTone.muted',
             tone: SurfaceTone.muted,
             description: 'Soft inset grouping surface.',
           ),
           _SurfaceSample(
-            title: 'Dark',
+            title: 'SurfaceTone.dark',
             tone: SurfaceTone.dark,
             description: 'High-emphasis dark surface.',
             dark: true,
