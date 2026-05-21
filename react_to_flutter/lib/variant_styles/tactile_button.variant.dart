@@ -67,7 +67,7 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
         ),
         DecorationPart.boxShadow([
           BoxShadow(
-            color: tokens.primaryDark,
+            color: tokens.primaryDim,
             offset: Offset(0, tokens.shadowPrimaryLgOffset),
           ),
         ]),
@@ -140,7 +140,7 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
         ),
         DecorationPart.boxShadow([
           BoxShadow(
-            color: tokens.streakDark,
+            color: tokens.streakDim,
             offset: Offset(0, tokens.shadowStreakOffset),
           ),
         ]),
@@ -276,13 +276,13 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
         DecorationPart.color(tokens.primarySoft),
         DecorationPart.border(
           Border.all(
-            color: tokens.primaryLight,
+            color: tokens.primaryBright,
             width: tokens.borderWidthDefault,
           ),
         ),
         DecorationPart.boxShadow([
           BoxShadow(
-            color: tokens.primaryLight,
+            color: tokens.primaryBright,
             offset: Offset(0, tokens.shadowGhostOffset),
           ),
         ]),
@@ -314,13 +314,13 @@ final tactileButtonStyle = VariantStyle.surfaceParts<AppTokens>(
           DecorationPart.color(tokens.primarySoft),
           DecorationPart.border(
             Border.all(
-              color: tokens.primaryLight,
+              color: tokens.primaryBright,
               width: tokens.borderWidthDefault,
             ),
           ),
           DecorationPart.boxShadow([
             BoxShadow(
-              color: tokens.primaryLight,
+              color: tokens.primaryBright,
               offset: Offset(0, tokens.shadowGhostOffset),
             ),
           ]),

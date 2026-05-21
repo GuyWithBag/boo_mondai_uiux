@@ -47,7 +47,6 @@ class _StudySessionScaffold extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final tokens = context.themeTokens<AppTokens>();
     final currentIndex = useState(0);
     final isRevealed = useState(false);
     final selectedOption = useState<String?>(null);

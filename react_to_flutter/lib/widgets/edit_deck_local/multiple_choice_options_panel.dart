@@ -38,7 +38,7 @@ class MultipleChoiceOptionsPanel extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: tokens.primarySoft,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: tokens.primaryLight),
+                  border: Border.all(color: tokens.primaryBright),
                 ),
                 child: Text(
                   'Select correct',

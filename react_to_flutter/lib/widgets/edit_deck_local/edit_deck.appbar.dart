@@ -63,7 +63,7 @@ class EditDeckAppbar extends HookWidget implements PreferredSizeWidget {
                     decoration: BoxDecoration(
                       color: tokens.primarySoft,
                       borderRadius: BorderRadius.circular(7.r),
-                      border: Border.all(color: tokens.primaryLight, width: 2),
+                      border: Border.all(color: tokens.primaryBright, width: 2),
                     ),
                     child: Text(
                       'DRAFT DECK',

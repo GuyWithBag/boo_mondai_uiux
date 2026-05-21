@@ -89,7 +89,7 @@ class HomePage extends HookWidget {
                       borderRadius: BorderRadius.circular(tokens.radius2xl.r),
                       boxShadow: [
                         BoxShadow(
-                          color: tokens.primaryDark,
+                          color: tokens.primaryDim,
                           offset: Offset(0, 5.h),
                         ),
                       ],

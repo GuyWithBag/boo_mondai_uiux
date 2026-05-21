@@ -7,6 +7,7 @@ import 'package:theme_variants/theme_variants.dart';
 import '../theme/app_tokens.dart';
 import 'package:react_to_flutter/variant_styles/variant_styles.barrel.dart';
 import '../widgets/tactile_button.dart';
+import '../widgets/variant_text_field.dart';
 
 class DesignSystemPage extends HookWidget {
   const DesignSystemPage({super.key});
@@ -34,6 +35,7 @@ class DesignSystemPage extends HookWidget {
                       const _TypographySection(),
                       const _SurfaceSection(),
                       const _ButtonLabSection(),
+                      const _TextFieldSection(),
                       const _RoadmapSection(),
                     ],
                   ),
@@ -78,7 +80,7 @@ class _Header extends StatelessWidget {
                 borderRadius: BorderRadius.circular(tokens.radius2xl),
                 boxShadow: [
                   BoxShadow(
-                    color: tokens.primaryDark,
+                    color: tokens.primaryDim,
                     offset: const Offset(0, 4),
                   ),
                 ],
@@ -211,11 +213,11 @@ class _ColorSection extends StatelessWidget {
             title: 'Brand',
             swatches: [
               _TokenSwatch('primary', tokens.primary),
-              _TokenSwatch('primaryDark', tokens.primaryDark),
-              _TokenSwatch('primaryLight', tokens.primaryLight),
+              _TokenSwatch('primaryDim', tokens.primaryDim),
+              _TokenSwatch('primaryBright', tokens.primaryBright),
               _TokenSwatch('primarySoft', tokens.primarySoft),
               _TokenSwatch('streak', tokens.streak),
-              _TokenSwatch('streakDark', tokens.streakDark),
+              _TokenSwatch('streakDim', tokens.streakDim),
             ],
           ),
           const SizedBox(height: 28),
@@ -414,7 +416,7 @@ class _ButtonLabSection extends StatelessWidget {
             ],
           ),
           _ButtonGroup(
-            title: 'State',
+            title: 'Feedback',
             children: [
               TactileButton(
                 tone: TactileTone.success,
@@ -429,6 +431,16 @@ class _ButtonLabSection extends StatelessWidget {
                 child: Text('Error'),
               ),
               TactileButton(
+                tone: TactileTone.error,
+                depth: TactileDepth.flat,
+                child: Text('Flat disabled error'),
+              ),
+            ],
+          ),
+          _ButtonGroup(
+            title: 'State',
+            children: [
+              TactileButton(
                 selected: true,
                 leading: Icon(Icons.star),
                 onPressed: () {},
@@ -437,6 +449,18 @@ class _ButtonLabSection extends StatelessWidget {
               TactileButton(
                 leading: Icon(Icons.block),
                 child: Text('Disabled'),
+              ),
+              TactileButton(
+                tone: TactileTone.filled,
+                depth: TactileDepth.flat,
+                onPressed: () {},
+                child: Text('Flat filled'),
+              ),
+              TactileButton(
+                depth: TactileDepth.flat,
+                leading: Icon(Icons.radio_button_checked),
+                onPressed: () {},
+                child: Text('Flat ghost'),
               ),
             ],
           ),
@@ -465,15 +489,16 @@ class _ButtonLabSection extends StatelessWidget {
             ],
           ),
           _ButtonGroup(
-            title: 'Alignment',
+            title: 'Content Layout',
             children: [
               SizedBox(
                 width: double.infinity,
                 child: TactileButton(
                   mainAxisAlignment: MainAxisAlignment.start,
                   leading: Icon(Icons.format_align_left),
+                  trailing: Icon(Icons.chevron_right),
                   onPressed: () {},
-                  child: Text('Start aligned'),
+                  child: Text('Leading and trailing'),
                 ),
               ),
               SizedBox(
@@ -485,6 +510,16 @@ class _ButtonLabSection extends StatelessWidget {
                   child: Text('Center aligned'),
                 ),
               ),
+              SizedBox(
+                width: double.infinity,
+                child: TactileButton(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  leading: Icon(Icons.swap_horiz),
+                  trailing: Icon(Icons.keyboard_arrow_down),
+                  onPressed: () {},
+                  child: Text('Space between'),
+                ),
+              ),
               TactileButton(
                 leading: Icon(Icons.fit_screen),
                 onPressed: () {},
@@ -492,6 +527,150 @@ class _ButtonLabSection extends StatelessWidget {
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TextFieldSection extends StatelessWidget {
+  const _TextFieldSection();
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.themeTokens<AppTokens>();
+
+    return DesignSection(
+      title: '06. Text Field Variants',
+      child: _ResponsiveGrid(
+        minItemWidth: 320,
+        children: [
+          _TextFieldSample(
+            title: 'No Frame / Body Large',
+            description: 'TextFieldCard content style.',
+            child: Surface(
+              style: surfaceStyle.resolve(tokens, const [SurfaceTone.surface]),
+              child: const SizedBox(
+                height: 130,
+                child: VariantTextField(
+                  maxLines: null,
+                  expands: true,
+                  textAlignVertical: TextAlignVertical.top,
+                  placeholder: '私は毎日図書館で勉強します。',
+                  variants: [
+                    AppTextFieldSize.bodyLarge,
+                    AppTextFieldFrame.none,
+                    AppTextFieldTone.neutral,
+                  ],
+                ),
+              ),
+            ),
+          ),
+          _TextFieldSample(
+            title: 'Outline / Label Large',
+            description: 'Matching input and compact editable rows.',
+            child: const VariantTextField(
+              placeholder: 'Term or answer',
+              variants: [
+                AppTextFieldSize.labelLarge,
+                AppTextFieldFrame.outline,
+                AppTextFieldTone.neutral,
+              ],
+            ),
+          ),
+          _TextFieldSample(
+            title: 'Underline / Brand',
+            description: 'Fill-in-the-blank active answer field.',
+            child: const SizedBox(
+              width: 260,
+              child: VariantTextField(
+                placeholder: '図書館',
+                variants: [
+                  AppTextFieldSize.labelLarge,
+                  AppTextFieldFrame.underline,
+                  AppTextFieldTone.brand,
+                ],
+              ),
+            ),
+          ),
+          _TextFieldSample(
+            title: 'Underline / Success',
+            description: 'Revealed correct answer state.',
+            child: const SizedBox(
+              width: 260,
+              child: VariantTextField(
+                enabled: false,
+                placeholder: 'Correct answer',
+                variants: [
+                  AppTextFieldSize.labelLarge,
+                  AppTextFieldFrame.underline,
+                  AppTextFieldTone.success,
+                ],
+              ),
+            ),
+          ),
+          _TextFieldSample(
+            title: 'Underline / Error',
+            description: 'Revealed incorrect answer state.',
+            child: const SizedBox(
+              width: 260,
+              child: VariantTextField(
+                enabled: false,
+                placeholder: 'Wrong answer',
+                variants: [
+                  AppTextFieldSize.labelLarge,
+                  AppTextFieldFrame.underline,
+                  AppTextFieldTone.error,
+                  AppTextFieldState.incorrect,
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _TextFieldSample extends StatelessWidget {
+  const _TextFieldSample({
+    required this.title,
+    required this.description,
+    required this.child,
+  });
+
+  final String title;
+  final String description;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    final tokens = context.themeTokens<AppTokens>();
+
+    return Surface(
+      style: surfaceStyle.resolve(tokens, const [SurfaceTone.muted]),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: appTextStyle.resolve(tokens, [
+              TextSize.labelLarge,
+              TextWeight.heavy,
+              TextTone.primary,
+            ]),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            description,
+            style: appTextStyle.resolve(tokens, [
+              TextSize.label,
+              TextWeight.body,
+              TextTone.secondary,
+            ]),
+          ),
+          const SizedBox(height: 18),
+          child,
         ],
       ),
     );
@@ -624,7 +803,7 @@ class _RoadmapSection extends StatelessWidget {
     ];
 
     return DesignSection(
-      title: '07. Accessibility & Flutter Roadmap',
+      title: '08. Accessibility & Flutter Roadmap',
       child: Surface(
         style: surfaceStyle.resolve(tokens, const [SurfaceTone.dark]),
         child: Column(

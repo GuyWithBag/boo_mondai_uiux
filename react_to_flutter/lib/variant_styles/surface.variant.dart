@@ -60,17 +60,17 @@ final surfaceStyle = VariantStyle.surfaceParts<AppTokens>(
     },
     SurfaceTone.dark: (tokens) => {
       SurfaceStylePart.decoration({
-        DecorationPart.color(tokens.primaryDark),
+        DecorationPart.color(tokens.primaryDim),
         DecorationPart.radius(tokens.radiusContainerLarge),
         DecorationPart.border(
           Border.all(
-            color: tokens.primaryDark,
+            color: tokens.primaryDim,
             width: tokens.borderWidthDefault,
           ),
         ),
         DecorationPart.boxShadow([
           BoxShadow(
-            color: tokens.primaryDark.withValues(alpha: 0.35),
+            color: tokens.primaryDim.withValues(alpha: 0.35),
             offset: const Offset(0, 8),
             blurRadius: 20,
           ),
