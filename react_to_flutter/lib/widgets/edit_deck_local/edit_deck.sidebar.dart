@@ -4,6 +4,7 @@ import 'package:theme_variants/theme_variants.dart';
 
 import '../../theme/app_tokens.dart';
 import '../../variant_styles/tactile_button.variant.dart';
+import '../../widgets/panel_header.dart';
 import '../../widgets/tactile_button.dart';
 
 class EditDeckSidebar extends StatelessWidget {
@@ -23,24 +24,9 @@ class EditDeckSidebar extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Container(
-            padding: EdgeInsets.all(20.w),
-            color: tokens.softGray,
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'Cards (3)',
-                    style: TextStyle(
-                      color: tokens.textPrimary,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w900,
-                    ),
-                  ),
-                ),
-                TactileButton.icon(onPressed: () {}, icon: Icons.add),
-              ],
-            ),
+          PanelHeader(
+            title: 'Cards (3)',
+            trailing: TactileButton.icon(onPressed: () {}, icon: Icons.add),
           ),
           Expanded(
             child: ListView(

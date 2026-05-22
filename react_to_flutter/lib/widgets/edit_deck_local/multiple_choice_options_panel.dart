@@ -4,6 +4,8 @@ import 'package:theme_variants/theme_variants.dart';
 
 import '../../theme/app_tokens.dart';
 import '../../variant_styles/variant_styles.barrel.dart';
+import '../../widgets/section_eyebrow.dart';
+import '../../widgets/status_badge.dart';
 import '../../widgets/tactile_button.dart';
 
 class MultipleChoiceOptionsPanel extends StatelessWidget {
@@ -20,35 +22,8 @@ class MultipleChoiceOptionsPanel extends StatelessWidget {
         children: [
           Row(
             children: [
-              Expanded(
-                child: Text(
-                  'Answer Options'.toUpperCase(),
-                  style: appTextStyle.resolve(tokens, [
-                    TextSize.labelSmall,
-                    TextWeight.heavy,
-                    TextTone.muted,
-                  ]),
-                ),
-              ),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 10,
-                  vertical: 5,
-                ),
-                decoration: BoxDecoration(
-                  color: tokens.primarySoft,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: tokens.primaryBright),
-                ),
-                child: Text(
-                  'Select correct',
-                  style: TextStyle(
-                    color: tokens.primary,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-              ),
+              const Expanded(child: SectionEyebrow('Answer Options')),
+              const StatusBadge(label: 'Select correct'),
             ],
           ),
           const SizedBox(height: 22),

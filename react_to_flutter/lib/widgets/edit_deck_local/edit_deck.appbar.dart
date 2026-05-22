@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../theme/app_tokens.dart';
 import '../../variant_styles/tactile_button.variant.dart';
+import '../../widgets/meta_label.dart';
+import '../../widgets/status_badge.dart';
 import '../../widgets/tactile_button.dart';
 
 class EditDeckAppbar extends HookWidget implements PreferredSizeWidget {
@@ -55,34 +57,8 @@ class EditDeckAppbar extends HookWidget implements PreferredSizeWidget {
                 runSpacing: 8.h,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 8.w,
-                      vertical: 4.h,
-                    ),
-                    decoration: BoxDecoration(
-                      color: tokens.primarySoft,
-                      borderRadius: BorderRadius.circular(7.r),
-                      border: Border.all(color: tokens.primaryBright, width: 2),
-                    ),
-                    child: Text(
-                      'DRAFT DECK',
-                      style: TextStyle(
-                        color: tokens.primary,
-                        fontSize: 10.sp,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ),
-                  Icon(Icons.lock, color: tokens.textMuted, size: 14.sp),
-                  Text(
-                    'Private',
-                    style: TextStyle(
-                      color: tokens.textMuted,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 12.sp,
-                    ),
-                  ),
+                  const StatusBadge(label: 'Draft Deck'),
+                  const MetaLabel(icon: Icons.lock, label: 'Private'),
                 ],
               ),
               SizedBox(height: 4.h),

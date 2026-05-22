@@ -11,6 +11,8 @@ import StudySession from "./pages/StudySession.tsx";
 import CreatorStudio from "./pages/CreatorStudio.tsx";
 import DesignSystem from "./pages/DesignSystem.tsx";
 import Settings from "./pages/Settings.tsx";
+import BrowserSearchDemo from "./pages/BrowserPage.tsx";
+import ComponentPlayground from "./pages/ComponentPlayground.tsx";
 
 export default function App() {
   return (
@@ -27,6 +29,8 @@ export default function App() {
           <Route path="/study" element={<StudySession />} />
           <Route path="/creator" element={<CreatorStudio />} />
           <Route path="/design" element={<DesignSystem />} />
+          <Route path="/browse" element={<BrowserSearchDemo />} />
+          <Route path="/playground" element={<ComponentPlayground />} />
         </Routes>
       </BrowserRouter>
     </SettingsProvider>
